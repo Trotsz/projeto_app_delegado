@@ -7,12 +7,12 @@ Este documento aprofunda o arquivo de Milestones e Issues, quebrando cada Issue 
 ## 🚩 Milestone 1: Setup Inicial, Arquitetura e DevOps
 
 ### 📦 Issue 1.1: Inicialização dos Repositórios e Estrutura
-- [ ] Criar o projeto / repositório no GitHub (Mono-repo ou repositórios separados).
-- [ ] **Backend:** Rodar `npm init -y` e `npx tsc --init`.
+- [x] Criar o projeto / repositório no GitHub (Mono-repo ou repositórios separados).
+- [x] **Backend:** Rodar `npm init -y` e `npx tsc --init`.
 - [ ] **Backend:** Criar a estrutura básica de pastas (ex: `src/`).
-- [ ] **Frontend:** Criar app base com `npx create-expo-app@latest -t expo-template-blank-typescript`.
-- [ ] Criar e popular os arquivos `.gitignore` para ambos os projetos.
-- [ ] Subir o commit inicial (`Initial commit`) para a branch `main`.
+- [x] **Frontend:** Criar app base com `npx create-expo-app@latest -t expo-template-blank-typescript`.
+- [x] Criar e popular os arquivos `.gitignore` para ambos os projetos.
+- [x] Subir o commit inicial (`Initial commit`) para a branch `main`.
 
 ### 🧹 Issue 1.2: Configuração de Linter e Padronização de Código
 - [ ] Instalar `eslint`, `prettier` e os plugins de integração no Backend e Frontend.

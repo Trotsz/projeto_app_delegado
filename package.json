@@ -1,0 +1,23 @@
+{
+  "name": "projeto_app_delegado",
+  "version": "1.0.0",
+  "description": "Criação do app de demandas do delegado Ruchester",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SkyXTec/projeto_app_delegado.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SkyXTec/projeto_app_delegado/issues"
+  },
+  "homepage": "https://github.com/SkyXTec/projeto_app_delegado#readme",
+  "devDependencies": {
+    "typescript": "^6.0.2"
+  }
+}

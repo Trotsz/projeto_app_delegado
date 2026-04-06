@@ -1,0 +1,68 @@
+# Dependencies
+node_modules
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Build output
+dist
+build
+
+# TypeScript
+*.tsbuildinfo
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Docker
+Dockerfile
+docker-compose.yml
+docker-compose.override.yml
+.dockerignore
+
+# Version managers
+.nvmrc
+.node-version
+
+# Linting & formatting
+.eslintrc
+.eslintrc.*
+.eslintignore
+.prettierrc
+.prettierrc.*
+.prettierignore
+
+# Prisma migrations (optional, see note below)
+prisma/migrations
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# IDE & editors
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs
+*.log
+
+# Tests
+__tests__
+*.test.ts
+*.spec.ts
+coverage
+
+# Docs
+*.md
+README*
+LICENSE

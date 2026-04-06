@@ -1,0 +1,19 @@
+services:
+  postgres:
+    image: postgres:18
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - postgres-db-volume:/var/lib/postgresql
+    ports:
+      - 5432:5432
+    networks:
+      - postgres-db-network
+
+volumes:
+  postgres-db-volume:
+
+networks:
+  postgres-db-network:
+    driver: bridge

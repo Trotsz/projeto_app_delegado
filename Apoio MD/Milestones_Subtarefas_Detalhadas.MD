@@ -9,7 +9,7 @@ Este documento aprofunda o arquivo de Milestones e Issues, quebrando cada Issue 
 ### 📦 Issue 1.1: Inicialização dos Repositórios e Estrutura
 - [x] Criar o projeto / repositório no GitHub (Mono-repo ou repositórios separados).
 - [x] **Backend:** Rodar `npm init -y` e `npx tsc --init`.
-- [ ] **Backend:** Criar a estrutura básica de pastas (ex: `src/`).
+- [x] **Backend:** Criar a estrutura básica de pastas (ex: `src/`).
 - [x] **Frontend:** Criar app base com `npx create-expo-app@latest -t expo-template-blank-typescript`.
 - [x] Criar e popular os arquivos `.gitignore` para ambos os projetos.
 - [x] Subir o commit inicial (`Initial commit`) para a branch `main`.

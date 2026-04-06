@@ -1,0 +1,16 @@
+# Dependências
+node_modules/
+
+# Builds e Build estáticos do expo
+dist/
+build/
+.expo/
+
+# Arquivos de Lock
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Arquivos locais/temporários
+coverage/
+*.log

@@ -1,0 +1,15 @@
+chore(config): configurar arquitetura base, eslint e prettier
+
+**OBJETIVO**
+- Configurar o projeto com a estrutura de pastas correta e definir ferramentas de padronização de código (Linter, Formatter e Node Version), garantindo o alinhamento da equipe de desenvolvimento.
+
+**O QUE FOI FEITO**
+- Criada a arquitetura de diretórios para o Backend (raiz/src) e Frontend (app_conexao_direta).
+- Configurado arquivo `.nvmrc` travado na versão 24.14.1 LTS do Node.
+- Configurado o Prettier, `.prettierrc` e `.prettierignore`.
+- Configurado o ESLint com o padrão Flat Config (`eslint.config.mjs`) no backend e frontend usando a versão 9 da biblioteca e compatibilidade com o Expo e TypeScript.
+- Ajuste de dependências nos `package.json` para scripts `lint` e `format`.
+
+**NOTAS ADICIONAIS**
+- Solucionadas as incompatibilidades do ESLint (legacy vs flat config).
+- Prepara o terreno para os hooks do Husky e lint-staged (etapa posterior).

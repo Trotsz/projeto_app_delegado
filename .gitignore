@@ -1,3 +1,5 @@
 MD
 node_modules
 .env
+# Commit messages temporary files
+commit_message_*.txt

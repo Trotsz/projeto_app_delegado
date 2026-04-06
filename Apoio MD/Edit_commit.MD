@@ -1,14 +1,15 @@
-docs(planejamento): criar documentacao estrutural e roadmap base
+docs(apoio): registrar novas configuracoes de projeto e atualizar backlog
 
 **OBJETIVO**
-- definir a arquitetura (Front e Back), as stacks definitivas e o fluxo de trabalho antes de iniciar o projeto, garantindo organização da equipe.
+
+- Documentar as ferramentas base de padronização adotadas no projeto, permitindo que qualquer desenvolvedor entenda como lidar com as novas versões dos Linters (Flat Config) e com o Workflow do Git (Husky).
 
 **O QUE FOI FEITO**
-- Criado arquivo `Estrutura.MD` com o detalhamento das tecnologias (Expo, Styled Components, Node, Prisma, etc).
-- Quebradas as fases de desenvolvimento em `Milestones_Subtarefas_Detalhadas.MD`.
-- Adicionado guia de `Arquitetura_Pastas.MD` mapeando o padrão Controller-Service-Repository no backend e componentização no frontend.
-- Estabelecidas as regras em `Padronizacao_Commits.MD`.
+
+- Criado arquivo `Configuracoes_Projeto.MD` explicando o fluxo do `.nvmrc`, do novo ESLint Flat Config (`.mjs`) e dos hooks de commit do Husky/lint-staged.
+- Atualizado o backlog em `Milestones_Subtarefas_Detalhadas.MD` marcando as tarefas da Issue 1.2 como concluídas.
 
 **NOTAS ADICIONAIS**
-- Fecha a Milestone 0 e inicia a `Milestone 1 | issue 1.1`
-- Arquivos de apoio estão na pasta `Apoio MD`
+
+- Encerra a Issue 1.2 (Linter e Padronização de Código).
+- Projeto base preparado para início dos desenvolvimentos centrais.

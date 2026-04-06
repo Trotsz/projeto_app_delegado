@@ -15,11 +15,11 @@ Este documento aprofunda o arquivo de Milestones e Issues, quebrando cada Issue 
 - [x] Subir o commit inicial (`Initial commit`) para a branch `main`.
 
 ### 🧹 Issue 1.2: Configuração de Linter e Padronização de Código
-- [ ] Instalar `eslint`, `prettier` e os plugins de integração no Backend e Frontend.
-- [ ] Criar arquivo `.eslintrc.json` configurando regras da equipe (ex: sem `any`, aspas simples, etc).
-- [ ] Criar arquivo `.prettierrc` para formatação automática.
-- [ ] Rodar `npx husky-init` e instalar o `lint-staged`.
-- [ ] Adicionar hook de `pre-commit` no Husky para rodar o linting automaticamente antes de cada commit.
+- [x] Instalar `eslint`, `prettier` e os plugins de integração no Backend e Frontend.
+- [x] Criar arquivo `eslint.config.mjs` configurando regras da equipe (ex: sem `any`, aspas simples, etc).
+- [x] Criar arquivo `.prettierrc` para formatação automática.
+- [x] Rodar `npx husky init` e instalar o `lint-staged`.
+- [x] Adicionar hook de `pre-commit` no Husky para rodar o linting automaticamente antes de cada commit.
 
 ### 🐳 Issue 1.3: Containerização de Banco de Dados
 - [ ] Criar arquivo `docker-compose.yml` na raiz do Backend.

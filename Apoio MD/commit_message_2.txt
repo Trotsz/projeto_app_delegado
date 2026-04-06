@@ -1,0 +1,13 @@
+chore(husky): configurar hooks de commit com lint-staged
+
+**OBJETIVO**
+- Bloquear commits com má formatação e garantir a qualidade do código com auto-fix durante o stage via Husky e lint-staged.
+
+**O QUE FOI FEITO**
+- Instaladas as dependências `husky` e `lint-staged` na raiz do monorepo.
+- Inicializado o ambiente Husky e alterado o script `pre-commit` para executar `npx lint-staged`.
+- Criado arquivo `.lintstagedrc.json` com regras para formatação (`prettier --write`) e validação (`eslint --fix`) para os arquivos JavaScript/TypeScript, bem como correção de format para `.json`, `.md` e `.html`.
+- Adicionado script `prepare` com o Husky no `package.json` base.
+
+**NOTAS ADICIONAIS**
+- Finalizando as etapas de configuração inicial. Pronto para seguir com as entregas da Milestone 1.

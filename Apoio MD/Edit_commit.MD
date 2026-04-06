@@ -1,15 +1,17 @@
-docs(apoio): registrar novas configuracoes de projeto e atualizar backlog
+ci(actions): configurar pipeline de ci, templates de pr e variaveis base
 
 **OBJETIVO**
 
-- Documentar as ferramentas base de padronização adotadas no projeto, permitindo que qualquer desenvolvedor entenda como lidar com as novas versões dos Linters (Flat Config) e com o Workflow do Git (Husky).
+- Criar ambiente de Integração Contínua (CI) básico para blindar o código fonte de quebras estruturais ou lintings incorretos por parte da equipe durante Pull Requests.
 
 **O QUE FOI FEITO**
 
-- Criado arquivo `Configuracoes_Projeto.MD` explicando o fluxo do `.nvmrc`, do novo ESLint Flat Config (`.mjs`) e dos hooks de commit do Husky/lint-staged.
-- Atualizado o backlog em `Milestones_Subtarefas_Detalhadas.MD` marcando as tarefas da Issue 1.2 como concluídas.
+- Desenvolvido template de Pull Request (`.github/PULL_REQUEST_TEMPLATE.md`) com checklist validativo e identificação de issues.
+- Adicionado GitHub Actions (`.github/workflows/ci.yml`) capaz de configurar o Node v24 automático, cache do NPM e validação do fluxo nos projetos (raiz e app).
+- Adicionado guia explicativo do fluxo em `Apoio MD/CI_e_Pull_Requests.MD`.
+- Adicionados os arquivos `.env` na raiz para abrigar a `DATABASE_URL` e `PORT` futuramente requeridos pelo backend.
 
 **NOTAS ADICIONAIS**
 
-- Encerra a Issue 1.2 (Linter e Padronização de Código).
-- Projeto base preparado para início dos desenvolvimentos centrais.
+- Conclui as dependências da Milestone 1 completando a Issue 1.4.
+- Ambiente DevOps básico de pé: Código já não engaja branchs bloqueadas sem atestar qualidade.

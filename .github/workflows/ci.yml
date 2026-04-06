@@ -1,0 +1,43 @@
+name: CI Pipeline
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  lint-and-validate:
+    name: Code Quality (Lint)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ⬇️ Checkout do código
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Ler versão do Node local (.nvmrc)
+        id: nvm
+        run: echo "node_version=$(cat .nvmrc)" >> $GITHUB_OUTPUT
+
+      - name: 🟩 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ steps.nvm.outputs.node_version }}
+          cache: 'npm'
+          cache-dependency-path: |
+            package-lock.json
+            app_conexao_direta/package-lock.json
+
+      - name: 📦 Instalar Dependências (Backend/Raiz)
+        run: npm ci
+
+      - name: 📦 Instalar Dependências (Frontend/Expo)
+        run: npm ci --prefix app_conexao_direta
+
+      - name: 🔍 Rodar Linter (Backend/Raiz)
+        run: npm run lint
+
+      - name: 🔍 Rodar Linter (Frontend/Expo)
+        run: npm run lint --prefix app_conexao_direta

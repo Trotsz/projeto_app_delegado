@@ -25,10 +25,10 @@ Este documento aprofunda o arquivo de Milestones e Issues, quebrando cada Issue 
 
 ### 🐳 Issue 1.3: Containerização de Banco de Dados
 
-- [ ] Criar arquivo `docker-compose.yml` na raiz do Backend.
-- [ ] Configurar serviço do PostgreSQL (imagem, portas, variáveis de ambiente de user/senha).
-- [ ] Rodar `docker compose up -d` e testar a conexão no DBeaver (ou similar).
-- [ ] Documentar o processo de inicialização no `README.md`.
+- [x] Criar arquivo `docker-compose.yml` na raiz do Backend.
+- [x] Configurar serviço do PostgreSQL (imagem, portas, variáveis de ambiente de user/senha).
+- [x] Rodar `docker compose up -d` e testar a conexão no DBeaver (ou similar).
+- [x] Documentar o processo de inicialização no `README.md`.
 
 ### 🤖 Issue 1.4: CI Automático Básico (GitHub Actions)
 

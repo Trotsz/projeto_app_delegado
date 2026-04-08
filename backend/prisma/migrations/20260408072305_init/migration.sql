@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Demand" ALTER COLUMN "status" SET DEFAULT 'ONGOING';

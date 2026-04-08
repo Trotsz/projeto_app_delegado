@@ -42,10 +42,10 @@ Este documento aprofunda o arquivo de Milestones e Issues, quebrando cada Issue 
 
 ### 🗄️ Issue 2.1: Configuração do ORM e Migrations Iniciais
 
-- [ ] Instalar o Prisma ORM (`npm install prisma --save-dev` e `npx prisma init`).
-- [ ] Configurar variável `DATABASE_URL` no `.env`.
-- [ ] Escrever os `models` no arquivo `schema.prisma`: `User` e `Demanda` (status, titulo, descricao).
-- [ ] Rodar `npx prisma migrate dev --name init_db` para gerar as tabelas.
+- [x] Instalar o Prisma ORM (`npm install prisma --save-dev` e `npx prisma init`).
+- [x] Configurar variável `DATABASE_URL` no `.env`.
+- [x] Escrever os `models` no arquivo `schema.prisma`: `User` e `Demanda` (status, titulo, descricao).
+- [x] Rodar `npx prisma migrate dev --name init_db` para gerar as tabelas.
 
 ### 🏛️ Issue 2.2: Estruturação _Controller-Service-Repository_
 

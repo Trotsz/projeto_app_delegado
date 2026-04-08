@@ -25,6 +25,7 @@ model Demand {
   title String
   description String?
   approved Boolean @default(false)
+  status Status @default(ONGOING)
   author User @relation(fields: [authorId], references: [id])
   authorId String
 }
@@ -32,4 +33,9 @@ model Demand {
 enum Role {
   ADMIN
   USER
+}
+
+enum Status {
+  SOLVED
+  ONGOING
 }

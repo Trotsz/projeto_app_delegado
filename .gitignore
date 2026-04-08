@@ -1,5 +1,7 @@
 MD
 node_modules
 .env
+/backend/src/generated/prisma
+/backend/src/.env
 # Commit messages temporary files
 commit_message_*.txt

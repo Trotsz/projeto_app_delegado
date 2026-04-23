@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Criação do app de demandas do delegado Ruchester",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",

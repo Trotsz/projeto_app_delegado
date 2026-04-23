@@ -49,9 +49,9 @@ Este documento aprofunda o arquivo de Milestones e Issues, quebrando cada Issue 
 
 ### 🏛️ Issue 2.2: Estruturação _Controller-Service-Repository_
 
-- [ ] Instalar Express e tipos do Express (`@types/express`).
-- [ ] Criar subpastas: `src/controllers`, `src/services`, `src/repositories`, `src/routes`.
-- [ ] Criar roteador principal (`index.ts` nas rotas).
+- [x] Instalar Express e tipos do Express (`@types/express`).
+- [x] Criar subpastas: `src/controllers`, `src/services`, `src/repositories`, `src/routes`.
+- [x] Criar roteador principal (`index.ts` nas rotas).
 - [ ] Criar endpoint simples `GET /health` de ponta a ponta (Controller -> Service -> Repo) para provar o formato.
 
 ### 🔐 Issue 2.3: Módulo de Autenticação (Login e Cadastro)

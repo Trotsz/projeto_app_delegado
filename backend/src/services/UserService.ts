@@ -1,8 +1,8 @@
-import { prisma } from '../lib/prisma.ts';
+import UserRepository from '../repositories/UserRepository.ts';
 
 class UserService {
   async findAll() {
-    return prisma.user.findMany();
+    return UserRepository.findAll();
   }
 }
 

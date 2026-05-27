@@ -56,11 +56,11 @@ Este documento aprofunda o arquivo de Milestones e Issues, quebrando cada Issue 
 
 ### 🔐 Issue 2.3: Módulo de Autenticação (Login e Cadastro)
 
-- [ ] Instalar `bcrypt` (e types) e `jsonwebtoken` (e types).
-- [ ] **Repository:** Criar buscas de usuário por Email e criação de Usuário.
-- [ ] **Service:** Lógica de _hash_ de senhas no registro e comparação no login.
-- [ ] **Service:** Geração de payload e token JWT.
-- [ ] **Controller:** Expor `/auth/register` e `/auth/login`.
+- [x] Instalar `bcrypt` (e types) e `jsonwebtoken` (e types).
+- [x] **Repository:** Criar buscas de usuário por Email e criação de Usuário.
+- [x] **Service:** Lógica de _hash_ de senhas no registro e comparação no login.
+- [x] **Service:** Geração de payload e token JWT.
+- [x] **Controller:** Expor `/auth/register` e `/auth/login`.
 
 ### 📄 Issue 2.4: Módulo de Demandas (CRUD)
 

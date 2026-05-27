@@ -8,6 +8,7 @@ async function main() {
     create: {
       email: 'test@gmail.com',
       name: 'John Doe',
+      hashedPassword: 'a123',
       role: Role.USER,
     },
   });

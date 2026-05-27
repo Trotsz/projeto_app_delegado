@@ -1,33 +1,8 @@
-import type { Request, Response } from 'express';
-import express from 'express';
-import bodyParser from 'body-parser';
-import userController from '../controllers/UserController.ts';
+import { Router } from 'express';
+import userRoutes from './userRoutes.ts';
 
-const app = express();
-const port = 3000;
+const router = Router();
 
-const jsonParser = bodyParser.json();
+router.use('/user', userRoutes);
 
-app.get('/', (_: Request, res: Response) => {
-  res.send('Root');
-});
-
-app.post('/user/register', jsonParser, (req: Request, res: Response) => {
-  userController.create(req, res);
-});
-
-app.post('/user/login', jsonParser, (req: Request, res: Response) => {
-  userController.login(req, res);
-});
-
-app.get('/users', (_: any, res: Response) => {
-  userController.findAll(_, res);
-});
-
-app.get('/user/:email', (req, res) => {
-  userController.findByEmail(req, res);
-});
-
-app.listen(port, () => {
-  console.log('Rodando na porta ' + port);
-});
+export default router;

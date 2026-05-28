@@ -11,7 +11,7 @@ export default function Input({ label, error, ...rest }: InputProps) {
   return (
     <Container>
       <Label>{label}</Label>
-      <StyledInput hasError={!!error} placeholderTextColor="#9E9E9E" {...rest} />
+      <StyledInput $hasError={!!error} placeholderTextColor="#9E9E9E" {...rest} />
       {error && <ErrorText>{error}</ErrorText>}
     </Container>
   );

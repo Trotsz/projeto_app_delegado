@@ -4,9 +4,9 @@ export const Container = styled.View`
   margin-bottom: ${({ theme }) => theme.spacing.md}px;
 `;
 
-export const StyledInput = styled.TextInput<{ hasError: boolean }>`
+export const StyledInput = styled.TextInput<{ $hasError: boolean }>`
   border-width: 1px;
-  border-color: ${({ hasError, theme }) => (hasError ? theme.colors.error : theme.colors.border)};
+  border-color: ${({ $hasError, theme }) => ($hasError ? theme.colors.error : theme.colors.border)};
   border-radius: ${({ theme }) => theme.borderRadius.md}px;
   padding: ${({ theme }) => theme.spacing.md}px;
   font-family: ${({ theme }) => theme.fonts.regular};

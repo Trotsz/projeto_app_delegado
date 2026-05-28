@@ -22,7 +22,7 @@ model User {
 }
 
 model Demand {
-  id Int @id
+  id Int @id @default(autoincrement())
   title String
   description String?
   approved Boolean @default(false)

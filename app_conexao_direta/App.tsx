@@ -1,20 +1,26 @@
+import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ThemeProvider } from 'styled-components';
+import { useAuthStore } from './src/store/useAuthStore';
+import AuthRoutes from './src/routes/AuthRoutes';
+import AppRoutes from './src/routes/AppRoutes';
+import { theme } from './src/theme';
+
+const queryClient = new QueryClient();
 
 export default function App() {
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={theme}>
+        <NavigationContainer>
+          {isAuthenticated ? <AppRoutes /> : <AuthRoutes />}
+          <StatusBar style="auto" />
+        </NavigationContainer>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

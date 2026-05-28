@@ -1,6 +1,6 @@
 import React from 'react';
-import { TextInputProps } from 'react-native';
-import { Container, StyledInput, Label, ErrorText } from './styles';
+import { View, TextInput, Text, TextInputProps } from 'react-native';
+import { styles } from './styles';
 
 interface InputProps extends TextInputProps {
   label: string;
@@ -9,10 +9,14 @@ interface InputProps extends TextInputProps {
 
 export default function Input({ label, error, ...rest }: InputProps) {
   return (
-    <Container>
-      <Label>{label}</Label>
-      <StyledInput $hasError={!!error} placeholderTextColor="#9E9E9E" {...rest} />
-      {error && <ErrorText>{error}</ErrorText>}
-    </Container>
+    <View style={styles.container}>
+      <Text style={styles.label}>{label}</Text>
+      <TextInput
+        style={[styles.input, error ? styles.inputError : undefined]}
+        placeholderTextColor="#9E9E9E"
+        {...rest}
+      />
+      {error && <Text style={styles.error}>{error}</Text>}
+    </View>
   );
 }

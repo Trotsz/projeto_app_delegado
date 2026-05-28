@@ -1,33 +1,10 @@
 import React, { useState } from 'react';
-import { Alert } from 'react-native';
-import styled from 'styled-components/native';
+import { View, Text, Alert, StyleSheet } from 'react-native';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import { useAuthStore } from '../../store/useAuthStore';
 import api from '../../services/api';
-
-const Container = styled.View`
-  flex: 1;
-  justify-content: center;
-  padding: ${({ theme }) => theme.spacing.xl}px;
-  background-color: ${({ theme }) => theme.colors.background};
-`;
-
-const Title = styled.Text`
-  font-family: ${({ theme }) => theme.fonts.bold};
-  font-size: 32px;
-  color: ${({ theme }) => theme.colors.primary};
-  text-align: center;
-  margin-bottom: ${({ theme }) => theme.spacing.xl}px;
-`;
-
-const Subtitle = styled.Text`
-  font-family: ${({ theme }) => theme.fonts.regular};
-  font-size: 16px;
-  color: ${({ theme }) => theme.colors.textSecondary};
-  text-align: center;
-  margin-bottom: ${({ theme }) => theme.spacing.xl}px;
-`;
+import { theme } from '../../theme';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -44,8 +21,13 @@ export default function LoginScreen() {
     setLoading(true);
     try {
       const { data } = await api.post('/user/login', { email, password });
-      const user = JSON.parse(atob(data.split('.')[1]));
-      setAuth(data, { id: user.id, name: user.name, email: user.email, role: user.role });
+      const payload = JSON.parse(atob(data.split('.')[1]));
+      setAuth(data, {
+        id: payload.id,
+        name: payload.name,
+        email: payload.email,
+        role: payload.role,
+      });
     } catch {
       Alert.alert('Erro', 'Email ou senha inválidos');
     } finally {
@@ -54,9 +36,9 @@ export default function LoginScreen() {
   }
 
   return (
-    <Container>
-      <Title>App Delegado</Title>
-      <Subtitle>Acompanhamento de Demandas</Subtitle>
+    <View style={styles.container}>
+      <Text style={styles.title}>App Delegado</Text>
+      <Text style={styles.subtitle}>Acompanhamento de Demandas</Text>
       <Input
         label="Email"
         value={email}
@@ -66,6 +48,29 @@ export default function LoginScreen() {
       />
       <Input label="Senha" value={password} onChangeText={setPassword} secureTextEntry />
       <Button title={loading ? 'Entrando...' : 'Entrar'} onPress={handleLogin} disabled={loading} />
-    </Container>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: theme.spacing.xl,
+    backgroundColor: theme.colors.background,
+  },
+  title: {
+    fontFamily: theme.fonts.bold,
+    fontSize: 32,
+    color: theme.colors.primary,
+    textAlign: 'center',
+    marginBottom: theme.spacing.xl,
+  },
+  subtitle: {
+    fontFamily: theme.fonts.regular,
+    fontSize: 16,
+    color: theme.colors.textSecondary,
+    textAlign: 'center',
+    marginBottom: theme.spacing.xl,
+  },
+});

@@ -1,5 +1,6 @@
 import React from 'react';
-import { Container, Label } from './styles';
+import { TouchableOpacity, Text } from 'react-native';
+import { styles } from './styles';
 
 interface ButtonProps {
   title: string;
@@ -15,8 +16,23 @@ export default function Button({
   disabled = false,
 }: ButtonProps) {
   return (
-    <Container $variant={variant} $disabled={disabled} disabled={disabled} onPress={onPress}>
-      <Label $variant={variant}>{title}</Label>
-    </Container>
+    <TouchableOpacity
+      style={[styles.base, disabled ? styles.disabled : styles[variant]]}
+      onPress={onPress}
+      disabled={disabled}
+    >
+      <Text
+        style={[
+          styles.label,
+          disabled
+            ? styles.labelDisabled
+            : styles[
+                `label${variant.charAt(0).toUpperCase() + variant.slice(1)}` as keyof typeof styles
+              ],
+        ]}
+      >
+        {title}
+      </Text>
+    </TouchableOpacity>
   );
 }

@@ -1,28 +1,43 @@
-import styled from 'styled-components/native';
+import { StyleSheet } from 'react-native';
+import { theme } from '../../theme';
 
-export const Container = styled.TouchableOpacity<{
-  $variant: 'primary' | 'secondary' | 'outline';
-  $disabled: boolean;
-}>`
-  background-color: ${({ $variant, $disabled, theme }) =>
-    $disabled
-      ? theme.colors.disabled
-      : $variant === 'primary'
-        ? theme.colors.primary
-        : $variant === 'secondary'
-          ? theme.colors.secondary
-          : 'transparent'};
-  padding: ${({ theme }) => theme.spacing.md}px ${({ theme }) => theme.spacing.lg}px;
-  border-radius: ${({ theme }) => theme.borderRadius.md}px;
-  border-width: ${({ $variant }) => ($variant === 'outline' ? 2 : 0)}px;
-  border-color: ${({ theme }) => theme.colors.primary};
-  align-items: center;
-  justify-content: center;
-  opacity: ${({ $disabled }) => ($disabled ? 0.6 : 1)};
-`;
-
-export const Label = styled.Text<{ $variant: 'primary' | 'secondary' | 'outline' }>`
-  color: ${({ $variant, theme }) => ($variant === 'outline' ? theme.colors.primary : '#FFFFFF')};
-  font-family: ${({ theme }) => theme.fonts.bold};
-  font-size: 16px;
-`;
+export const styles = StyleSheet.create({
+  base: {
+    paddingVertical: theme.spacing.md,
+    paddingHorizontal: theme.spacing.lg,
+    borderRadius: theme.borderRadius.md,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  primary: {
+    backgroundColor: theme.colors.primary,
+  },
+  secondary: {
+    backgroundColor: theme.colors.secondary,
+  },
+  outline: {
+    backgroundColor: 'transparent',
+    borderWidth: 2,
+    borderColor: theme.colors.primary,
+  },
+  disabled: {
+    backgroundColor: theme.colors.disabled,
+    opacity: 0.6,
+  },
+  label: {
+    fontFamily: theme.fonts.bold,
+    fontSize: 16,
+  },
+  labelPrimary: {
+    color: '#FFFFFF',
+  },
+  labelSecondary: {
+    color: '#FFFFFF',
+  },
+  labelOutline: {
+    color: theme.colors.primary,
+  },
+  labelDisabled: {
+    color: '#FFFFFF',
+  },
+});

@@ -1,22 +1,9 @@
 import React, { useState } from 'react';
-import { Alert, KeyboardAvoidingView, Platform } from 'react-native';
-import styled from 'styled-components/native';
+import { View, Text, Alert, StyleSheet } from 'react-native';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import { useCreateDemand } from '../../services/queries/useDemands';
-
-const Container = styled.KeyboardAvoidingView`
-  flex: 1;
-  background-color: ${({ theme }) => theme.colors.background};
-  padding: ${({ theme }) => theme.spacing.md}px;
-`;
-
-const Title = styled.Text`
-  font-family: ${({ theme }) => theme.fonts.bold};
-  font-size: 24px;
-  color: ${({ theme }) => theme.colors.text};
-  margin-bottom: ${({ theme }) => theme.spacing.lg}px;
-`;
+import { theme } from '../../theme';
 
 export default function NovaDemandaScreen() {
   const [title, setTitle] = useState('');
@@ -40,8 +27,8 @@ export default function NovaDemandaScreen() {
   }
 
   return (
-    <Container behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <Title>Nova Demanda</Title>
+    <View style={styles.container}>
+      <Text style={styles.title}>Nova Demanda</Text>
       <Input
         label="Título"
         value={title}
@@ -61,6 +48,20 @@ export default function NovaDemandaScreen() {
         onPress={handleCreate}
         disabled={isPending}
       />
-    </Container>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: theme.colors.background,
+    padding: theme.spacing.md,
+  },
+  title: {
+    fontFamily: theme.fonts.bold,
+    fontSize: 24,
+    color: theme.colors.text,
+    marginBottom: theme.spacing.lg,
+  },
+});

@@ -12,12 +12,15 @@
   },
   "dependencies": {
     "@expo/metro-runtime": "^56.0.13",
+    "@tanstack/react-query": "^5.100.14",
+    "axios": "^1.16.1",
     "expo": "~54.0.34",
     "expo-status-bar": "~3.0.9",
     "react": "19.1.0",
     "react-dom": "^19.1.0",
     "react-native": "0.81.5",
-    "react-native-web": "^0.21.2"
+    "react-native-web": "^0.21.2",
+    "zustand": "^5.0.14"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.5",

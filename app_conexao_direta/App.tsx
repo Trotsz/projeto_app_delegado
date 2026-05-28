@@ -1,25 +1,20 @@
 import React from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { NavigationContainer } from '@react-navigation/native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useAuthStore } from './src/store/useAuthStore';
-import AuthRoutes from './src/routes/AuthRoutes';
-import AppRoutes from './src/routes/AppRoutes';
-
-const queryClient = new QueryClient();
+import { View, Text, StyleSheet } from 'react-native';
 
 export default function App() {
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-
   return (
-    <SafeAreaProvider>
-      <QueryClientProvider client={queryClient}>
-        <NavigationContainer>
-          {isAuthenticated ? <AppRoutes /> : <AuthRoutes />}
-          <StatusBar style="auto" />
-        </NavigationContainer>
-      </QueryClientProvider>
-    </SafeAreaProvider>
+    <View style={styles.container}>
+      <Text style={styles.text}>App Delegado - Teste</Text>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#1B5E20',
+  },
+  text: { color: '#FFFFFF', fontSize: 24, fontWeight: 'bold' },
+});

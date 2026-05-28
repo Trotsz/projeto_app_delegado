@@ -28,7 +28,7 @@ export default function CardDemanda({ demand, onPress }: CardDemandaProps) {
       <Title>{demand.title}</Title>
       {demand.description && <Description>{demand.description}</Description>}
       <Footer>
-        <StatusBadge status={demand.status}>
+        <StatusBadge $status={demand.status}>
           <StatusText>{demand.status === 'SOLVED' ? 'Resolvido' : 'Em andamento'}</StatusText>
         </StatusBadge>
         <AuthorText>{demand.author.name}</AuthorText>

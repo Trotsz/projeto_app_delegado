@@ -32,9 +32,9 @@ export const Footer = styled.View`
   align-items: center;
 `;
 
-export const StatusBadge = styled.View<{ status: string }>`
-  background-color: ${({ status, theme }) =>
-    status === 'SOLVED' ? theme.colors.success : theme.colors.warning};
+export const StatusBadge = styled.View<{ $status: string }>`
+  background-color: ${({ $status, theme }) =>
+    $status === 'SOLVED' ? theme.colors.success : theme.colors.warning};
   padding: 4px 8px;
   border-radius: ${({ theme }) => theme.borderRadius.sm}px;
 `;

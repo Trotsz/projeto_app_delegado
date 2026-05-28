@@ -35,7 +35,7 @@ Este documento organiza o passo a passo de desenvolvimento do projeto, dividindo
 
 - [x] Configurar cliente de requisições web utilizando o **Axios** (criando interceptors para passar o token JWT).
 - [x] Implementar o **React Query (TanStack Query)** para trazer a lista de demandas, realizar cache inteligente e mutações consistentes.
-- [ ] Configurar o local storage com o **MMKV** para máxima performance.
+- [ ] Configurar o local storage com o **MMKV** para máxima performance (requer dev build).
 - [ ] Desenvolver a lógica "Offline First" (Salvando demandas em rascunho com o MMKV se o usuário perder conexão durante a criação).
 - [x] Integrar sistema de Autenticação (Login).
 - [x] Integrar fluxos reais do App: Criar e Acompanhar o Status das demandas consultando o Backend.

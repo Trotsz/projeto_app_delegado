@@ -15,8 +15,8 @@ export default function Button({
   disabled = false,
 }: ButtonProps) {
   return (
-    <Container variant={variant} disabled={disabled} onPress={onPress}>
-      <Label variant={variant}>{title}</Label>
+    <Container $variant={variant} $disabled={disabled} disabled={disabled} onPress={onPress}>
+      <Label $variant={variant}>{title}</Label>
     </Container>
   );
 }

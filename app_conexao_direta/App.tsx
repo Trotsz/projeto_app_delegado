@@ -1,41 +1,21 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useAuthStore } from './src/store/useAuthStore';
+import LoginScreen from './src/screens/Login';
+import TabNavigator from './src/components/TabNavigator';
 
-const Stack = createStackNavigator();
 const queryClient = new QueryClient();
 
-function TestScreen() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.text}>App Delegado - Teste</Text>
-    </View>
-  );
-}
-
 export default function App() {
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+
   return (
     <SafeAreaProvider>
       <QueryClientProvider client={queryClient}>
-        <NavigationContainer>
-          <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Test" component={TestScreen} />
-          </Stack.Navigator>
-        </NavigationContainer>
+        {isAuthenticated ? <TabNavigator /> : <LoginScreen />}
       </QueryClientProvider>
     </SafeAreaProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#1B5E20',
-  },
-  text: { color: '#FFFFFF', fontSize: 24, fontWeight: 'bold' },
-});

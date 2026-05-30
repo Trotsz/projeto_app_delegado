@@ -1,0 +1,305 @@
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  ScrollView,
+  TouchableOpacity,
+  Alert,
+  StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import api from '../../services/api';
+import { theme } from '../../theme';
+
+interface Props {
+  onNavigateToLogin?: () => void;
+}
+
+export default function CadastroScreen({ onNavigateToLogin }: Props) {
+  const insets = useSafeAreaInsets();
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  async function handleRegister() {
+    if (!name || !email || !password) {
+      Alert.alert('Erro', 'Preencha todos os campos');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await api.post('/user/register', { name, email, password });
+      Alert.alert('Sucesso', 'Conta criada com sucesso!');
+      onNavigateToLogin?.();
+    } catch {
+      Alert.alert('Erro', 'Não foi possível criar a conta');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <KeyboardAvoidingView
+      style={styles.wrapper}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+    >
+      <ScrollView
+        contentContainerStyle={[styles.scroll, { paddingBottom: insets.bottom + theme.spacing.lg }]}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={styles.topbar}>
+          <TouchableOpacity onPress={onNavigateToLogin}>
+            <Text style={styles.backArrow}>‹</Text>
+          </TouchableOpacity>
+          <Text style={styles.appNameTop}>Citizen Connect</Text>
+        </View>
+
+        <Text style={styles.appName}>Criar Conta</Text>
+        <Text style={styles.tagline}>
+          Junte-se à comunidade e acompanhe as demandas da sua cidade.
+        </Text>
+
+        <Text style={styles.label}>Nome completo</Text>
+        <TextInput
+          style={styles.input}
+          value={name}
+          onChangeText={setName}
+          placeholder="Seu nome"
+          placeholderTextColor="rgba(255,255,255,0.4)"
+        />
+
+        <Text style={styles.label}>Email</Text>
+        <TextInput
+          style={styles.input}
+          value={email}
+          onChangeText={setEmail}
+          placeholder="seu@email.com"
+          placeholderTextColor="rgba(255,255,255,0.4)"
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
+
+        <Text style={styles.label}>Senha</Text>
+        <View style={styles.passwordWrapper}>
+          <TextInput
+            style={styles.inputPassword}
+            value={password}
+            onChangeText={setPassword}
+            placeholder="••••••••"
+            placeholderTextColor="rgba(255,255,255,0.4)"
+            secureTextEntry={!showPassword}
+          />
+          <TouchableOpacity style={styles.eyeBtn} onPress={() => setShowPassword(!showPassword)}>
+            <Text style={styles.eyeIcon}>{showPassword ? '👁️' : '👁️‍🗨️'}</Text>
+          </TouchableOpacity>
+        </View>
+
+        <TouchableOpacity
+          style={[styles.btnRegister, loading && styles.btnDisabled]}
+          onPress={handleRegister}
+          disabled={loading}
+          activeOpacity={0.8}
+        >
+          <Text style={styles.btnRegisterText}>{loading ? 'Criando...' : 'Criar Conta'}</Text>
+        </TouchableOpacity>
+
+        <View style={styles.divider}>
+          <View style={styles.dividerLine} />
+          <Text style={styles.dividerText}>ou cadastre-se com</Text>
+          <View style={styles.dividerLine} />
+        </View>
+
+        <TouchableOpacity style={styles.btnSocialGoogle}>
+          <Text style={styles.socialIcon}>🔵</Text>
+          <Text style={styles.socialLabel}>Google</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.btnSocialGov}>
+          <Text style={styles.socialIcon}>🟡</Text>
+          <Text style={styles.socialLabelGov}>Gov.br</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.loginLinkWrapper} onPress={onNavigateToLogin}>
+          <Text style={styles.loginLink}>
+            Já tem conta? <Text style={styles.loginLinkHighlight}>Faça login</Text>
+          </Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </KeyboardAvoidingView>
+  );
+}
+
+const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+    backgroundColor: theme.colors.primary,
+  },
+  scroll: {
+    flexGrow: 1,
+    padding: theme.spacing.md,
+  },
+  topbar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.sm,
+    marginBottom: theme.spacing.lg,
+  },
+  backArrow: {
+    fontSize: 28,
+    color: theme.colors.white,
+  },
+  appNameTop: {
+    fontFamily: theme.fonts.bold,
+    fontSize: theme.fontSize.base,
+    color: theme.colors.white,
+  },
+  appName: {
+    fontFamily: theme.fonts.bold,
+    fontSize: theme.fontSize.xl,
+    fontWeight: '800',
+    color: theme.colors.white,
+    marginBottom: theme.spacing.xs,
+  },
+  tagline: {
+    fontFamily: theme.fonts.regular,
+    fontSize: theme.fontSize.sm,
+    color: 'rgba(255,255,255,0.7)',
+    lineHeight: 20,
+    marginBottom: theme.spacing.lg,
+  },
+  label: {
+    fontFamily: theme.fonts.medium,
+    fontSize: theme.fontSize.sm,
+    color: theme.colors.white,
+    marginBottom: theme.spacing.xs,
+  },
+  input: {
+    width: '100%',
+    paddingVertical: 14,
+    paddingHorizontal: 14,
+    borderWidth: 1.5,
+    borderColor: 'rgba(255,255,255,0.25)',
+    borderRadius: theme.borderRadius.sm,
+    backgroundColor: 'rgba(255,255,255,0.08)',
+    color: theme.colors.white,
+    fontFamily: theme.fonts.regular,
+    fontSize: theme.fontSize.base,
+    marginBottom: theme.spacing.md,
+  },
+  passwordWrapper: {
+    position: 'relative',
+    marginBottom: theme.spacing.md,
+  },
+  inputPassword: {
+    width: '100%',
+    paddingVertical: 14,
+    paddingHorizontal: 14,
+    paddingRight: 44,
+    borderWidth: 1.5,
+    borderColor: 'rgba(255,255,255,0.25)',
+    borderRadius: theme.borderRadius.sm,
+    backgroundColor: 'rgba(255,255,255,0.08)',
+    color: theme.colors.white,
+    fontFamily: theme.fonts.regular,
+    fontSize: theme.fontSize.base,
+  },
+  eyeBtn: {
+    position: 'absolute',
+    right: 14,
+    top: '50%',
+    transform: [{ translateY: -10 }],
+  },
+  eyeIcon: {
+    fontSize: 16,
+    color: 'rgba(255,255,255,0.4)',
+  },
+  btnRegister: {
+    width: '100%',
+    paddingVertical: 16,
+    backgroundColor: theme.colors.accent,
+    borderRadius: theme.borderRadius.md,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: theme.spacing.lg,
+  },
+  btnDisabled: {
+    opacity: 0.5,
+  },
+  btnRegisterText: {
+    fontFamily: theme.fonts.bold,
+    fontSize: theme.fontSize.base,
+    color: theme.colors.white,
+  },
+  divider: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.sm,
+    marginBottom: theme.spacing.md,
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+  },
+  dividerText: {
+    fontFamily: theme.fonts.regular,
+    fontSize: theme.fontSize.xs,
+    color: 'rgba(255,255,255,0.5)',
+    letterSpacing: 0.08,
+    textTransform: 'uppercase',
+  },
+  btnSocialGoogle: {
+    width: '100%',
+    paddingVertical: 14,
+    backgroundColor: theme.colors.white,
+    borderRadius: theme.borderRadius.md,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: theme.spacing.sm,
+    marginBottom: theme.spacing.sm,
+  },
+  btnSocialGov: {
+    width: '100%',
+    paddingVertical: 14,
+    backgroundColor: theme.colors.accent,
+    borderRadius: theme.borderRadius.md,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: theme.spacing.sm,
+    marginBottom: theme.spacing.md,
+  },
+  socialIcon: {
+    fontSize: 16,
+  },
+  socialLabel: {
+    fontFamily: theme.fonts.medium,
+    fontSize: theme.fontSize.base,
+    color: theme.colors.text,
+  },
+  socialLabelGov: {
+    fontFamily: theme.fonts.medium,
+    fontSize: theme.fontSize.base,
+    color: theme.colors.white,
+  },
+  loginLink: {
+    fontFamily: theme.fonts.regular,
+    fontSize: theme.fontSize.sm,
+    color: 'rgba(255,255,255,0.6)',
+    textAlign: 'center',
+  },
+  loginLinkWrapper: {
+    alignItems: 'center',
+  },
+  loginLinkHighlight: {
+    color: theme.colors.accent,
+    fontWeight: '600',
+  },
+});

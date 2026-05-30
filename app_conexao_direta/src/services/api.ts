@@ -1,8 +1,30 @@
 import axios from 'axios';
+import { Platform } from 'react-native';
+import Constants from 'expo-constants';
 import { useAuthStore } from '../store/useAuthStore';
 
+function getBaseUrl(): string {
+  if (!__DEV__) {
+    return 'https://your-production-url.com';
+  }
+
+  // On physical devices, try to get the computer's IP from the Expo bundler URL
+  const hostUri = Constants.expoConfig?.hostUri;
+  if (hostUri) {
+    const host = hostUri.split(':')[0];
+    return `http://${host}:3000`;
+  }
+
+  // Emulator defaults
+  return Platform.select({
+    android: 'http://10.0.2.2:3000',
+    ios: 'http://localhost:3000',
+    default: 'http://localhost:3000',
+  });
+}
+
 const api = axios.create({
-  baseURL: 'http://10.0.2.2:3000',
+  baseURL: getBaseUrl(),
   timeout: 10000,
   headers: { 'Content-Type': 'application/json' },
 });

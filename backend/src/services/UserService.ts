@@ -4,8 +4,13 @@ import jwt from 'jsonwebtoken';
 
 class UserService {
   async create(data: any) {
-    const hashedPassword = await bcrypt.hash(data.hashedPassword, 10);
-    return userRepository.create({ ...data, hashedPassword });
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+    return userRepository.create({
+      name: data.name,
+      email: data.email,
+      role: data.role ?? 'USER',
+      hashedPassword,
+    });
   }
 
   async login(data: any) {

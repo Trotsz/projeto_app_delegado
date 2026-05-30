@@ -7,27 +7,42 @@ export const styles = StyleSheet.create({
   },
   label: {
     fontFamily: theme.fonts.medium,
-    fontSize: 14,
+    fontSize: theme.fontSize.sm,
     color: theme.colors.text,
     marginBottom: theme.spacing.xs,
   },
-  input: {
-    borderWidth: 1,
+  inputRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1.5,
     borderColor: theme.colors.border,
-    borderRadius: theme.borderRadius.md,
-    padding: theme.spacing.md,
-    fontFamily: theme.fonts.regular,
-    fontSize: 16,
-    color: theme.colors.text,
+    borderRadius: theme.borderRadius.sm,
     backgroundColor: theme.colors.surface,
   },
-  inputError: {
-    borderColor: theme.colors.error,
+  inputRowError: {
+    borderColor: theme.colors.red,
+  },
+  leftIcon: {
+    paddingLeft: 14,
+  },
+  rightIcon: {
+    paddingRight: 14,
+  },
+  input: {
+    flex: 1,
+    paddingVertical: 14,
+    paddingHorizontal: 14,
+    fontFamily: theme.fonts.regular,
+    fontSize: theme.fontSize.base,
+    color: theme.colors.text,
+  },
+  inputWithLeftIcon: {
+    paddingLeft: 12,
   },
   error: {
     fontFamily: theme.fonts.regular,
-    fontSize: 12,
-    color: theme.colors.error,
+    fontSize: theme.fontSize.xs,
+    color: theme.colors.red,
     marginTop: theme.spacing.xs,
   },
 });

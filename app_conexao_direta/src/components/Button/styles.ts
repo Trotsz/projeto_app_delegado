@@ -3,7 +3,7 @@ import { theme } from '../../theme';
 
 export const styles = StyleSheet.create({
   base: {
-    paddingVertical: theme.spacing.md,
+    paddingVertical: 16,
     paddingHorizontal: theme.spacing.lg,
     borderRadius: theme.borderRadius.md,
     alignItems: 'center',
@@ -12,32 +12,43 @@ export const styles = StyleSheet.create({
   primary: {
     backgroundColor: theme.colors.primary,
   },
-  secondary: {
-    backgroundColor: theme.colors.secondary,
+  accent: {
+    backgroundColor: theme.colors.accent,
   },
   outline: {
     backgroundColor: 'transparent',
-    borderWidth: 2,
-    borderColor: theme.colors.primary,
+    borderWidth: 1.5,
+    borderColor: theme.colors.border,
+  },
+  ghost: {
+    backgroundColor: 'transparent',
   },
   disabled: {
-    backgroundColor: theme.colors.disabled,
-    opacity: 0.6,
+    opacity: 0.5,
+  },
+  content: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+  },
+  iconWrap: {
+    marginRight: 4,
   },
   label: {
     fontFamily: theme.fonts.bold,
-    fontSize: 16,
+    fontSize: theme.fontSize.base,
   },
   labelPrimary: {
-    color: '#FFFFFF',
+    color: theme.colors.white,
   },
-  labelSecondary: {
-    color: '#FFFFFF',
+  labelAccent: {
+    color: theme.colors.white,
   },
   labelOutline: {
-    color: theme.colors.primary,
+    color: theme.colors.text,
   },
-  labelDisabled: {
-    color: '#FFFFFF',
+  labelGhost: {
+    color: theme.colors.text,
   },
 });

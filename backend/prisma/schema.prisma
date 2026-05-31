@@ -25,6 +25,7 @@ model Demand {
   id Int @id @default(autoincrement())
   title String
   description String?
+  category String?
   approved Boolean @default(false)
   status Status @default(ONGOING)
   author User @relation(fields: [authorId], references: [id])

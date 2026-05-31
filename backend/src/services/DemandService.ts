@@ -1,12 +1,12 @@
 import demandRepository from '../repositories/DemandRepository.ts';
 
 class DemandService {
-  async create(data: { title: string; description?: string; authorId: string }) {
+  async create(data: { title: string; description?: string; category?: string; authorId: string }) {
     return demandRepository.create(data);
   }
 
-  async findAll() {
-    return demandRepository.findAll();
+  async findAll(category?: string) {
+    return demandRepository.findAll(category);
   }
 
   async findById(id: number) {
@@ -15,7 +15,12 @@ class DemandService {
 
   async update(
     id: number,
-    data: { title?: string; description?: string; status?: 'SOLVED' | 'ONGOING' },
+    data: {
+      title?: string;
+      description?: string;
+      category?: string;
+      status?: 'SOLVED' | 'ONGOING';
+    },
     userId: string,
   ) {
     const demand = await demandRepository.findById(id);

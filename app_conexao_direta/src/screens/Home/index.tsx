@@ -12,12 +12,19 @@ const categories = [
   { key: 'educacao', label: 'Educação' },
   { key: 'seguranca', label: 'Segurança' },
   { key: 'meio-ambiente', label: 'Meio Ambiente' },
+  { key: 'mobilidade', label: 'Mobilidade' },
+  { key: 'limpeza', label: 'Limpeza Urbana' },
+  { key: 'outros', label: 'Outros' },
 ];
 
-export default function HomeScreen() {
+interface Props {
+  onNavigateToTab?: (tab: string) => void;
+}
+
+export default function HomeScreen({ onNavigateToTab }: Props) {
   const insets = useSafeAreaInsets();
-  const { data: demands, isLoading } = useDemands();
   const [activeFilter, setActiveFilter] = React.useState('all');
+  const { data: demands, isLoading } = useDemands(activeFilter);
 
   const pendingCount = demands?.filter((d) => d.status === 'ONGOING').length || 0;
   const solvedCount = demands?.filter((d) => d.status === 'SOLVED').length || 0;
@@ -28,12 +35,20 @@ export default function HomeScreen() {
       <Text style={styles.headline}>Como podemos{'\n'}ajudar?</Text>
       <Text style={styles.subheadline}>Acompanhe as demandas e obras da sua cidade</Text>
 
-      <TouchableOpacity style={styles.btnNovaDemanda} activeOpacity={0.8}>
+      <TouchableOpacity
+        style={styles.btnNovaDemanda}
+        activeOpacity={0.8}
+        onPress={() => onNavigateToTab?.('nova')}
+      >
         <Text style={styles.btnIcon}>➕</Text>
         <Text style={styles.btnText}>Nova Demanda</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.btnMapa} activeOpacity={0.8}>
+      <TouchableOpacity
+        style={styles.btnMapa}
+        activeOpacity={0.8}
+        onPress={() => onNavigateToTab?.('mapa')}
+      >
         <Text style={styles.btnIcon}>🗺️</Text>
         <Text style={styles.btnText}>Ver Mapa de Demandas</Text>
       </TouchableOpacity>
@@ -101,7 +116,7 @@ export default function HomeScreen() {
             <Text style={styles.appIconText}>🏛️</Text>
           </View>
           <View>
-            <Text style={styles.appName}>Citizen Connect</Text>
+            <Text style={styles.appName}>Conexão Direta</Text>
             <Text style={styles.appSubtitle}>App Delegado</Text>
           </View>
         </View>

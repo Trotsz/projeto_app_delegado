@@ -12,6 +12,10 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useCreateDemand } from '../../services/queries/useDemands';
 import { theme } from '../../theme';
 
+interface Props {
+  onNavigateToTab?: (tab: string) => void;
+}
+
 const categories = [
   { id: 'infra', icon: '🏗️', label: 'Infraestrutura' },
   { id: 'saude', icon: '🏥', label: 'Saúde' },
@@ -25,7 +29,7 @@ const categories = [
 
 type Step = 'category' | 'type' | 'details' | 'success';
 
-export default function NovaDemandaScreen() {
+export default function NovaDemandaScreen({ onNavigateToTab }: Props) {
   const insets = useSafeAreaInsets();
   const [step, setStep] = useState<Step>('category');
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -40,7 +44,7 @@ export default function NovaDemandaScreen() {
     }
 
     try {
-      await createDemand({ title: `${selectedCategory}: ${title}`, description });
+      await createDemand({ title, description, category: selectedCategory });
       setStep('success');
     } catch {
       Alert.alert('Erro', 'Não foi possível criar a demanda');
@@ -97,7 +101,7 @@ export default function NovaDemandaScreen() {
         >
           <Text style={styles.btnPrimaryText}>Nova Demanda</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.btnSecondary}>
+        <TouchableOpacity style={styles.btnSecondary} onPress={() => onNavigateToTab?.('home')}>
           <Text style={styles.btnSecondaryText}>Acompanhar Demandas</Text>
         </TouchableOpacity>
       </View>

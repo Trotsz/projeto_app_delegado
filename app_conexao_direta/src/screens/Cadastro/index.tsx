@@ -25,10 +25,12 @@ export default function CadastroScreen({ onNavigateToLogin }: Props) {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [errors, setErrors] = useState({ name: false, email: false, password: false });
 
   async function handleRegister() {
-    if (!name || !email || !password) {
-      Alert.alert('Erro', 'Preencha todos os campos');
+    const newErrors = { name: !name, email: !email, password: !password };
+    setErrors(newErrors);
+    if (newErrors.name || newErrors.email || newErrors.password) {
       return;
     }
 
@@ -57,7 +59,7 @@ export default function CadastroScreen({ onNavigateToLogin }: Props) {
           <TouchableOpacity onPress={onNavigateToLogin}>
             <Text style={styles.backArrow}>‹</Text>
           </TouchableOpacity>
-          <Text style={styles.appNameTop}>Citizen Connect</Text>
+          <Text style={styles.appNameTop}>Conexão Direta</Text>
         </View>
 
         <Text style={styles.appName}>Criar Conta</Text>
@@ -67,30 +69,41 @@ export default function CadastroScreen({ onNavigateToLogin }: Props) {
 
         <Text style={styles.label}>Nome completo</Text>
         <TextInput
-          style={styles.input}
+          style={[styles.input, errors.name && styles.inputError]}
           value={name}
-          onChangeText={setName}
+          onChangeText={(v) => {
+            setName(v);
+            setErrors((e) => ({ ...e, name: false }));
+          }}
           placeholder="Seu nome"
           placeholderTextColor="rgba(255,255,255,0.4)"
         />
+        {errors.name && <Text style={styles.errorText}>Nome é obrigatório</Text>}
 
         <Text style={styles.label}>Email</Text>
         <TextInput
-          style={styles.input}
+          style={[styles.input, errors.email && styles.inputError]}
           value={email}
-          onChangeText={setEmail}
+          onChangeText={(v) => {
+            setEmail(v);
+            setErrors((e) => ({ ...e, email: false }));
+          }}
           placeholder="seu@email.com"
           placeholderTextColor="rgba(255,255,255,0.4)"
           keyboardType="email-address"
           autoCapitalize="none"
         />
+        {errors.email && <Text style={styles.errorText}>Email é obrigatório</Text>}
 
         <Text style={styles.label}>Senha</Text>
         <View style={styles.passwordWrapper}>
           <TextInput
-            style={styles.inputPassword}
+            style={[styles.inputPassword, errors.password && styles.inputError]}
             value={password}
-            onChangeText={setPassword}
+            onChangeText={(v) => {
+              setPassword(v);
+              setErrors((e) => ({ ...e, password: false }));
+            }}
             placeholder="••••••••"
             placeholderTextColor="rgba(255,255,255,0.4)"
             secureTextEntry={!showPassword}
@@ -99,6 +112,7 @@ export default function CadastroScreen({ onNavigateToLogin }: Props) {
             <Text style={styles.eyeIcon}>{showPassword ? '👁️' : '👁️‍🗨️'}</Text>
           </TouchableOpacity>
         </View>
+        {errors.password && <Text style={styles.errorText}>Senha é obrigatória</Text>}
 
         <TouchableOpacity
           style={[styles.btnRegister, loading && styles.btnDisabled]}
@@ -208,6 +222,16 @@ const styles = StyleSheet.create({
     color: theme.colors.white,
     fontFamily: theme.fonts.regular,
     fontSize: theme.fontSize.base,
+  },
+  inputError: {
+    borderColor: theme.colors.red,
+  },
+  errorText: {
+    color: theme.colors.red,
+    fontFamily: theme.fonts.regular,
+    fontSize: theme.fontSize.xs,
+    marginTop: -theme.spacing.sm,
+    marginBottom: theme.spacing.md,
   },
   eyeBtn: {
     position: 'absolute',

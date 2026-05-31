@@ -21,8 +21,8 @@ export default function TabNavigator() {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        {activeTab === 'home' && <HomeScreen />}
-        {activeTab === 'nova' && <NovaDemandaScreen />}
+        {activeTab === 'home' && <HomeScreen onNavigateToTab={setActiveTab} />}
+        {activeTab === 'nova' && <NovaDemandaScreen onNavigateToTab={setActiveTab} />}
         {activeTab === 'perfil' && <PerfilScreen />}
         {activeTab === 'mapa' && (
           <View style={styles.placeholderScreen}>

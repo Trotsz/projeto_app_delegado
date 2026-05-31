@@ -4,10 +4,10 @@ import demandService from '../services/DemandService.ts';
 class DemandController {
   async create(req: Request, res: Response) {
     try {
-      const { title, description } = req.body;
+      const { title, description, category } = req.body;
       const authorId = req.user!.id;
 
-      const demand = await demandService.create({ title, description, authorId });
+      const demand = await demandService.create({ title, description, category, authorId });
 
       res.status(201).json(demand);
     } catch (err) {
@@ -16,9 +16,10 @@ class DemandController {
     }
   }
 
-  async findAll(_: Request, res: Response) {
+  async findAll(req: Request, res: Response) {
     try {
-      const demands = await demandService.findAll();
+      const category = req.query.category as string | undefined;
+      const demands = await demandService.findAll(category);
       res.status(200).json(demands);
     } catch (err) {
       console.log('Error: ' + err);
@@ -47,9 +48,13 @@ class DemandController {
     try {
       const id = Number(req.params.id);
       const userId = req.user!.id;
-      const { title, description, status } = req.body;
+      const { title, description, category, status } = req.body;
 
-      const demand = await demandService.update(id, { title, description, status }, userId);
+      const demand = await demandService.update(
+        id,
+        { title, description, category, status },
+        userId,
+      );
 
       res.status(200).json(demand);
     } catch (err) {

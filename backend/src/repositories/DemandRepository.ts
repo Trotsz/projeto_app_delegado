@@ -1,18 +1,25 @@
 import { prisma } from '../lib/prisma.ts';
 
 class DemandRepository {
-  async create(data: { title: string; description?: string; authorId: string }) {
+  async create(data: { title: string; description?: string; category?: string; authorId: string }) {
     return prisma.demand.create({
       data: {
         title: data.title,
         description: data.description ?? null,
+        category: data.category ?? null,
         author: { connect: { id: data.authorId } },
       },
     });
   }
 
-  async findAll() {
+  async findAll(category?: string) {
     return prisma.demand.findMany({
+      where:
+        category && category !== 'all'
+          ? category === 'outros'
+            ? { OR: [{ category: 'outros' }, { category: null }] }
+            : { category }
+          : undefined,
       include: { author: { select: { id: true, name: true, email: true } } },
     });
   }
@@ -26,7 +33,12 @@ class DemandRepository {
 
   async update(
     id: number,
-    data: { title?: string; description?: string; status?: 'SOLVED' | 'ONGOING' },
+    data: {
+      title?: string;
+      description?: string;
+      category?: string;
+      status?: 'SOLVED' | 'ONGOING';
+    },
   ) {
     return prisma.demand.update({
       where: { id },

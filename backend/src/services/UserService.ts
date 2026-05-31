@@ -4,6 +4,19 @@ import jwt from 'jsonwebtoken';
 
 class UserService {
   async create(data: any) {
+    if (data.password.length < 6) throw new Error('Your password must contain at least 6 digits');
+
+    let containsNumber = false;
+    const plen = data.password.length;
+    for (let i = 0; i < plen; i++) {
+      const asciiCode = data.password.charCodeAt(i);
+      if (asciiCode >= 48 && asciiCode <= 57) {
+        containsNumber = true;
+        break;
+      }
+    }
+    if (!containsNumber) throw new Error('Your password must contain at least 1 number');
+
     const hashedPassword = await bcrypt.hash(data.password, 10);
     return userRepository.create({
       name: data.name,

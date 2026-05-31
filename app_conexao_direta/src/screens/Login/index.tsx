@@ -12,6 +12,8 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuthStore } from '../../store/useAuthStore';
+import { saveAuth } from '../../store/secureStorage';
+import { jwtDecode } from '../../utils/jwt';
 import api from '../../services/api';
 import { theme } from '../../theme';
 
@@ -25,25 +27,32 @@ export default function LoginScreen({ onNavigateToCadastro }: Props) {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [errors, setErrors] = useState({ email: false, password: false });
   const setAuth = useAuthStore((state) => state.setAuth);
 
   async function handleLogin() {
-    if (!email || !password) {
-      Alert.alert('Erro', 'Preencha todos os campos');
+    const newErrors = { email: !email, password: !password };
+    setErrors(newErrors);
+    if (newErrors.email || newErrors.password) {
       return;
     }
 
     setLoading(true);
     try {
       const { data } = await api.post('/user/login', { email, password });
-      const payload = JSON.parse(atob(data.split('.')[1]));
-      setAuth(data, {
+      const payload = jwtDecode<{ id: string; name: string; email: string; role: string }>(
+        data as string,
+      );
+      const user = {
         id: payload.id,
         name: payload.name,
         email: payload.email,
-        role: payload.role,
-      });
-    } catch {
+        role: payload.role as 'ADMIN' | 'USER',
+      };
+      setAuth(data, user);
+      await saveAuth({ token: data, user });
+    } catch (err) {
+      console.log('Login error:', err);
       Alert.alert('Erro', 'Email ou senha inválidos');
     } finally {
       setLoading(false);
@@ -60,25 +69,29 @@ export default function LoginScreen({ onNavigateToCadastro }: Props) {
           <View style={styles.logoCircle}>
             <Text style={styles.logoEmoji}>🏛️</Text>
           </View>
-          <Text style={styles.appName}>Citizen Connect</Text>
+          <Text style={styles.appName}>Conexão Direta</Text>
         </View>
 
         <Text style={styles.heading}>Bem-vindo</Text>
         <Text style={styles.subtext}>Acompanhe as demandas da sua cidade</Text>
 
         <Text style={styles.label}>Email</Text>
-        <View style={styles.inputWrapper}>
+        <View style={[styles.inputWrapper, errors.email && styles.inputError]}>
           <Text style={styles.inputIcon}>✉️</Text>
           <TextInput
             style={styles.input}
             value={email}
-            onChangeText={setEmail}
+            onChangeText={(v) => {
+              setEmail(v);
+              setErrors((e) => ({ ...e, email: false }));
+            }}
             placeholder="seu@email.com"
             placeholderTextColor="rgba(255,255,255,0.35)"
             keyboardType="email-address"
             autoCapitalize="none"
           />
         </View>
+        {errors.email && <Text style={styles.errorText}>Email é obrigatório</Text>}
 
         <View style={styles.passwordHeader}>
           <Text style={styles.label}>Senha</Text>
@@ -86,12 +99,15 @@ export default function LoginScreen({ onNavigateToCadastro }: Props) {
             <Text style={styles.forgotLink}>Esqueceu?</Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.inputWrapper}>
+        <View style={[styles.inputWrapper, errors.password && styles.inputError]}>
           <Text style={styles.inputIcon}>🔒</Text>
           <TextInput
             style={styles.input}
             value={password}
-            onChangeText={setPassword}
+            onChangeText={(v) => {
+              setPassword(v);
+              setErrors((e) => ({ ...e, password: false }));
+            }}
             placeholder="••••••••"
             placeholderTextColor="rgba(255,255,255,0.35)"
             secureTextEntry={!showPassword}
@@ -100,6 +116,7 @@ export default function LoginScreen({ onNavigateToCadastro }: Props) {
             <Text style={styles.inputIcon}>{showPassword ? '👁️' : '👁️‍🗨️'}</Text>
           </TouchableOpacity>
         </View>
+        {errors.password && <Text style={styles.errorText}>Senha é obrigatória</Text>}
 
         <TouchableOpacity
           style={[styles.btnLogin, loading && styles.btnDisabled]}
@@ -213,6 +230,16 @@ const styles = StyleSheet.create({
     fontFamily: theme.fonts.regular,
     fontSize: theme.fontSize.base,
     color: theme.colors.white,
+  },
+  inputError: {
+    borderColor: theme.colors.red,
+  },
+  errorText: {
+    color: theme.colors.red,
+    fontFamily: theme.fonts.regular,
+    fontSize: theme.fontSize.xs,
+    marginTop: -theme.spacing.sm,
+    marginBottom: theme.spacing.md,
   },
   eyeButton: {
     padding: 4,

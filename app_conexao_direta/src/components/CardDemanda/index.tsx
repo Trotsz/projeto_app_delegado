@@ -8,7 +8,7 @@ interface Demand {
   description?: string | null;
   status: 'PENDING' | 'IN_PROGRESS' | 'SOLVED' | 'ONGOING';
   author: { name: string };
-  category?: string;
+  category?: string | null;
   date?: string;
 }
 

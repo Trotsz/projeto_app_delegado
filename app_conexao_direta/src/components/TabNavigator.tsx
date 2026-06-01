@@ -4,6 +4,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import HomeScreen from '../screens/Home';
 import NovaDemandaScreen from '../screens/NovaDemanda';
 import PerfilScreen from '../screens/Perfil';
+import DadosPessoaisScreen from '../screens/DadosPessoais';
+import MinhasDemandasScreen from '../screens/MinhasDemandas';
+import AlterarSenhaScreen from '../screens/AlterarSenha';
 import { theme } from '../theme';
 
 const tabs = [
@@ -17,13 +20,27 @@ const tabs = [
 export default function TabNavigator() {
   const insets = useSafeAreaInsets();
   const [activeTab, setActiveTab] = useState('home');
+  const [profileSubScreen, setProfileSubScreen] = useState<string | null>(null);
+
+  function renderProfileSubScreen() {
+    switch (profileSubScreen) {
+      case 'dados-pessoais':
+        return <DadosPessoaisScreen onGoBack={() => setProfileSubScreen(null)} />;
+      case 'minhas-demandas':
+        return <MinhasDemandasScreen onGoBack={() => setProfileSubScreen(null)} />;
+      case 'alterar-senha':
+        return <AlterarSenhaScreen onGoBack={() => setProfileSubScreen(null)} />;
+      default:
+        return <PerfilScreen onNavigateToSubScreen={setProfileSubScreen} />;
+    }
+  }
 
   return (
     <View style={styles.container}>
       <View style={styles.content}>
         {activeTab === 'home' && <HomeScreen onNavigateToTab={setActiveTab} />}
         {activeTab === 'nova' && <NovaDemandaScreen onNavigateToTab={setActiveTab} />}
-        {activeTab === 'perfil' && <PerfilScreen />}
+        {activeTab === 'perfil' && renderProfileSubScreen()}
         {activeTab === 'mapa' && (
           <View style={styles.placeholderScreen}>
             <Text style={styles.placeholderIcon}>🗺️</Text>

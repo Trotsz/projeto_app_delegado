@@ -13,7 +13,11 @@ import { useAuthStore } from '../../store/useAuthStore';
 import api from '../../services/api';
 import { theme } from '../../theme';
 
-export default function DadosPessoaisScreen() {
+interface DadosPessoaisScreenProps {
+  onGoBack?: () => void;
+}
+
+export default function DadosPessoaisScreen({ onGoBack }: DadosPessoaisScreenProps) {
   const insets = useSafeAreaInsets();
   const user = useAuthStore((state) => state.user);
   const [name, setName] = useState(user?.name || '');
@@ -43,7 +47,9 @@ export default function DadosPessoaisScreen() {
       contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + theme.spacing.lg }]}
     >
       <View style={styles.topbar}>
-        <Text style={styles.backArrow}>‹</Text>
+        <TouchableOpacity onPress={onGoBack}>
+          <Text style={styles.backArrow}>‹</Text>
+        </TouchableOpacity>
         <Text style={styles.topbarTitle}>Dados Pessoais</Text>
       </View>
 
@@ -108,7 +114,7 @@ export default function DadosPessoaisScreen() {
         <Text style={styles.btnSaveText}>{loading ? 'Salvando...' : 'Salvar Alterações'}</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.btnDiscard}>
+      <TouchableOpacity style={styles.btnDiscard} onPress={onGoBack}>
         <Text style={styles.btnDiscardText}>Descartar</Text>
       </TouchableOpacity>
     </ScrollView>

@@ -5,12 +5,16 @@ import { useAuthStore } from '../../store/useAuthStore';
 import { theme } from '../../theme';
 
 const menuItems = [
-  { icon: '👤', label: 'Dados Pessoais', color: theme.colors.accent },
-  { icon: '📋', label: 'Minhas Demandas', color: theme.colors.accent },
-  { icon: '🔑', label: 'Alterar Senha', color: theme.colors.accent },
+  { icon: '👤', label: 'Dados Pessoais', route: 'dados-pessoais', color: theme.colors.accent },
+  { icon: '📋', label: 'Minhas Demandas', route: 'minhas-demandas', color: theme.colors.accent },
+  { icon: '🔑', label: 'Alterar Senha', route: 'alterar-senha', color: theme.colors.accent },
 ];
 
-export default function PerfilScreen() {
+interface PerfilScreenProps {
+  onNavigateToSubScreen?: (screen: string) => void;
+}
+
+export default function PerfilScreen({ onNavigateToSubScreen }: PerfilScreenProps) {
   const insets = useSafeAreaInsets();
   const user = useAuthStore((state) => state.user);
   const logout = useAuthStore((state) => state.logout);
@@ -56,7 +60,12 @@ export default function PerfilScreen() {
       <Text style={styles.sectionLabel}>Configurações</Text>
 
       {menuItems.map((item, index) => (
-        <TouchableOpacity key={index} style={styles.menuItem} activeOpacity={0.8}>
+        <TouchableOpacity
+          key={index}
+          style={styles.menuItem}
+          activeOpacity={0.8}
+          onPress={() => onNavigateToSubScreen?.(item.route)}
+        >
           <View style={[styles.menuIcon, { backgroundColor: item.color }]}>
             <Text style={styles.menuIconText}>{item.icon}</Text>
           </View>

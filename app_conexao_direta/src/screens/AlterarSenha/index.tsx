@@ -12,7 +12,11 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import api from '../../services/api';
 import { theme } from '../../theme';
 
-export default function AlterarSenhaScreen() {
+interface AlterarSenhaScreenProps {
+  onGoBack?: () => void;
+}
+
+export default function AlterarSenhaScreen({ onGoBack }: AlterarSenhaScreenProps) {
   const insets = useSafeAreaInsets();
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -64,7 +68,9 @@ export default function AlterarSenhaScreen() {
       contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + theme.spacing.lg }]}
     >
       <View style={styles.topbar}>
-        <Text style={styles.backArrow}>‹</Text>
+        <TouchableOpacity onPress={onGoBack}>
+          <Text style={styles.backArrow}>‹</Text>
+        </TouchableOpacity>
         <Text style={styles.topbarTitle}>Alterar Senha</Text>
       </View>
 
@@ -150,7 +156,7 @@ export default function AlterarSenhaScreen() {
         <Text style={styles.btnPrimaryText}>{loading ? 'Alterando...' : 'Alterar Senha'}</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.btnCancel}>
+      <TouchableOpacity style={styles.btnCancel} onPress={onGoBack}>
         <Text style={styles.btnCancelText}>Cancelar</Text>
       </TouchableOpacity>
 

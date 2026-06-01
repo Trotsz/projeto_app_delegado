@@ -16,7 +16,11 @@ const statusBadge = {
   SOLVED: { label: 'Resolvida', style: 'solved' as const },
 };
 
-export default function MinhasDemandasScreen() {
+interface MinhasDemandasScreenProps {
+  onGoBack?: () => void;
+}
+
+export default function MinhasDemandasScreen({ onGoBack }: MinhasDemandasScreenProps) {
   const insets = useSafeAreaInsets();
   const { data: demands, isLoading } = useDemands();
   const [activeTab, setActiveTab] = useState('all');
@@ -32,7 +36,9 @@ export default function MinhasDemandasScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.topbar}>
-        <Text style={styles.backArrow}>‹</Text>
+        <TouchableOpacity onPress={onGoBack}>
+          <Text style={styles.backArrow}>‹</Text>
+        </TouchableOpacity>
         <Text style={styles.title}>Minhas Demandas</Text>
       </View>
 

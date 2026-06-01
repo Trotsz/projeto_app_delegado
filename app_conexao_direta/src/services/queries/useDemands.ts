@@ -12,12 +12,16 @@ interface Demand {
   author: { id: string; name: string; email: string };
 }
 
-export function useDemands(category?: string) {
+export function useDemands(category?: string, authorId?: string) {
   return useQuery<Demand[]>({
-    queryKey: ['demands', category],
+    queryKey: ['demands', category, authorId],
     queryFn: async () => {
-      const params = category && category !== 'all' ? { category } : undefined;
-      const { data } = await api.get('/demand', { params });
+      const params: Record<string, string> = {};
+      if (category && category !== 'all') params.category = category;
+      if (authorId) params.authorId = authorId;
+      const { data } = await api.get('/demand', {
+        params: Object.keys(params).length ? params : undefined,
+      });
       return data;
     },
   });

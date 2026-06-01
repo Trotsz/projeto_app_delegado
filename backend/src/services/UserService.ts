@@ -4,10 +4,12 @@ import jwt from 'jsonwebtoken';
 
 class UserService {
   async create(data: any) {
-    if (data.password.length < 6) throw new Error('Your password must contain at least 6 digits');
+    if (data.password.length < 8)
+      throw new Error('Your password must contain at least 8 characters');
+
+    const plen = data.password.length;
 
     let containsNumber = false;
-    const plen = data.password.length;
     for (let i = 0; i < plen; i++) {
       const asciiCode = data.password.charCodeAt(i);
       if (asciiCode >= 48 && asciiCode <= 57) {
@@ -16,6 +18,17 @@ class UserService {
       }
     }
     if (!containsNumber) throw new Error('Your password must contain at least 1 number');
+
+    let containsUCLetter = false;
+    for (let i = 0; i < plen; i++) {
+      const asciiCode = data.password.charCodeAt(i);
+      if (asciiCode >= 65 && asciiCode <= 90) {
+        containsUCLetter = true;
+        break;
+      }
+    }
+    if (!containsUCLetter)
+      throw new Error('Your password must contain at least 1 upper case letter');
 
     const hashedPassword = await bcrypt.hash(data.password, 10);
     return userRepository.create({

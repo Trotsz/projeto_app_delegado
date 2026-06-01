@@ -19,7 +19,8 @@ class DemandController {
   async findAll(req: Request, res: Response) {
     try {
       const category = req.query.category as string | undefined;
-      const demands = await demandService.findAll(category);
+      const authorId = req.query.authorId as string | undefined;
+      const demands = await demandService.findAll(category, authorId);
       res.status(200).json(demands);
     } catch (err) {
       console.log('Error: ' + err);

@@ -12,14 +12,23 @@ class DemandRepository {
     });
   }
 
-  async findAll(category?: string) {
+  async findAll(category?: string, authorId?: string) {
+    const where: Record<string, unknown> = {};
+
+    if (category && category !== 'all') {
+      if (category === 'outros') {
+        where.OR = [{ category: 'outros' }, { category: null }];
+      } else {
+        where.category = category;
+      }
+    }
+
+    if (authorId) {
+      where.authorId = authorId;
+    }
+
     return prisma.demand.findMany({
-      where:
-        category && category !== 'all'
-          ? category === 'outros'
-            ? { OR: [{ category: 'outros' }, { category: null }] }
-            : { category }
-          : undefined,
+      where: Object.keys(where).length ? where : undefined,
       include: { author: { select: { id: true, name: true, email: true } } },
     });
   }

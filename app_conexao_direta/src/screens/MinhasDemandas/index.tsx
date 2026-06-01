@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useAuthStore } from '../../store/useAuthStore';
 import { useDemands } from '../../services/queries/useDemands';
 import { theme } from '../../theme';
 
@@ -22,7 +23,8 @@ interface MinhasDemandasScreenProps {
 
 export default function MinhasDemandasScreen({ onGoBack }: MinhasDemandasScreenProps) {
   const insets = useSafeAreaInsets();
-  const { data: demands, isLoading } = useDemands();
+  const user = useAuthStore((state) => state.user);
+  const { data: demands, isLoading } = useDemands(undefined, user?.id);
   const [activeTab, setActiveTab] = useState('all');
 
   const filtered = demands?.filter((d) => {

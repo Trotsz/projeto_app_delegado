@@ -5,8 +5,8 @@ class DemandService {
     return demandRepository.create(data);
   }
 
-  async findAll(category?: string) {
-    return demandRepository.findAll(category);
+  async findAll(category?: string, authorId?: string) {
+    return demandRepository.findAll(category, authorId);
   }
 
   async findById(id: number) {

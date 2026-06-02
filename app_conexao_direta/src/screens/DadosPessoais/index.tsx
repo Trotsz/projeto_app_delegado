@@ -22,6 +22,8 @@ export default function DadosPessoaisScreen({ onGoBack }: DadosPessoaisScreenPro
   const user = useAuthStore((state) => state.user);
   const [name, setName] = useState(user?.name || '');
   const [loading, setLoading] = useState(false);
+  const token = useAuthStore((state) => state.token);
+  const setAuth = useAuthStore((state) => state.setAuth);
 
   async function handleSave() {
     if (!name.trim()) {
@@ -31,7 +33,8 @@ export default function DadosPessoaisScreen({ onGoBack }: DadosPessoaisScreenPro
 
     setLoading(true);
     try {
-      await api.put('/user/profile', { name });
+      const { data } = await api.put('/user/profile', { name });
+      if (token) setAuth(token, data);
       Alert.alert('Sucesso', 'Dados atualizados com sucesso');
     } catch {
       Alert.alert('Erro', 'Não foi possível atualizar os dados');

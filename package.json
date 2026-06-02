@@ -15,6 +15,13 @@
     "type": "git",
     "url": "git+https://github.com/SkyXTec/projeto_app_delegado.git"
   },
+  "workspaces": [
+    "backend",
+    "mobile"
+  ],
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",

@@ -7,7 +7,7 @@
     "node": ">=20.0.0"
   },
   "scripts": {
-    "build": "tsc && prisma generate",
+    "build": "tsc -p tsconfig.json && prisma generate",
     "start": "node dist/server.js",
     "seed": "tsx prisma/seed.ts"
   },

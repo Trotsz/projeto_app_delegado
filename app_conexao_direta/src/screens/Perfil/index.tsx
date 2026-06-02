@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuthStore } from '../../store/useAuthStore';
+import { useDemands } from '../../services/queries/useDemands';
 import { theme } from '../../theme';
 
 const menuItems = [
@@ -18,6 +19,11 @@ export default function PerfilScreen({ onNavigateToSubScreen }: PerfilScreenProp
   const insets = useSafeAreaInsets();
   const user = useAuthStore((state) => state.user);
   const logout = useAuthStore((state) => state.logout);
+  const { data: demands } = useDemands(undefined, user?.id);
+
+  const solved = demands?.filter((d) => d.status === 'SOLVED').length ?? 0;
+  const ongoing = demands?.filter((d) => d.status === 'ONGOING').length ?? 0;
+  const pending = ongoing;
 
   return (
     <ScrollView
@@ -44,15 +50,15 @@ export default function PerfilScreen({ onNavigateToSubScreen }: PerfilScreenProp
 
       <View style={styles.statsRow}>
         <View style={styles.statBox}>
-          <Text style={styles.statNumberGreen}>0</Text>
+          <Text style={styles.statNumberGreen}>{solved}</Text>
           <Text style={styles.statLabel}>RESOLVIDAS</Text>
         </View>
         <View style={styles.statBox}>
-          <Text style={styles.statNumber}>2</Text>
+          <Text style={styles.statNumber}>{ongoing}</Text>
           <Text style={styles.statLabel}>EM ANDAMENTO</Text>
         </View>
         <View style={styles.statBox}>
-          <Text style={styles.statNumberYellow}>1</Text>
+          <Text style={styles.statNumberYellow}>{ongoing}</Text>
           <Text style={styles.statLabel}>PENDENTES</Text>
         </View>
       </View>

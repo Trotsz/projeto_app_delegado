@@ -3,8 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
     "start": "tsx src/server.ts",
+    "build": "prisma generate && prisma migrate deploy",
     "seed": "tsx prisma/seed.ts"
   },
   "keywords": [],

@@ -68,6 +68,10 @@ class UserService {
   async findByEmail(email: string | string[] | undefined) {
     return userRepository.findByEmail(email);
   }
+
+  async update(id: string, data: { name?: string }) {
+    return userRepository.update(id, data);
+  }
 }
 
 export default new UserService();

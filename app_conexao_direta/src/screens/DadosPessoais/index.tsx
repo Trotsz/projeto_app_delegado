@@ -21,18 +21,17 @@ export default function DadosPessoaisScreen({ onGoBack }: DadosPessoaisScreenPro
   const insets = useSafeAreaInsets();
   const user = useAuthStore((state) => state.user);
   const [name, setName] = useState(user?.name || '');
-  const [email, setEmail] = useState(user?.email || '');
   const [loading, setLoading] = useState(false);
 
   async function handleSave() {
-    if (!name.trim() || !email.trim()) {
-      Alert.alert('Erro', 'Preencha todos os campos');
+    if (!name.trim()) {
+      Alert.alert('Erro', 'Preencha o nome');
       return;
     }
 
     setLoading(true);
     try {
-      await api.put('/user/profile', { name, email });
+      await api.put('/user/profile', { name });
       Alert.alert('Sucesso', 'Dados atualizados com sucesso');
     } catch {
       Alert.alert('Erro', 'Não foi possível atualizar os dados');
@@ -81,27 +80,14 @@ export default function DadosPessoaisScreen({ onGoBack }: DadosPessoaisScreenPro
       </View>
 
       <Text style={styles.label}>Email</Text>
-      <View style={styles.inputWrapper}>
+      <View style={[styles.inputWrapper, styles.inputDisabled]}>
         <Text style={styles.inputIcon}>✉️</Text>
         <TextInput
           style={styles.input}
-          value={email}
-          onChangeText={setEmail}
+          value={user?.email || ''}
+          editable={false}
           placeholder="seu@email.com"
           placeholderTextColor={theme.colors.textLight}
-          keyboardType="email-address"
-          autoCapitalize="none"
-        />
-      </View>
-
-      <Text style={styles.label}>Telefone</Text>
-      <View style={styles.inputWrapper}>
-        <Text style={styles.inputIcon}>📞</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="(11) 99999-9999"
-          placeholderTextColor={theme.colors.textLight}
-          keyboardType="phone-pad"
         />
       </View>
 
@@ -224,6 +210,9 @@ const styles = StyleSheet.create({
     fontSize: theme.fontSize.base,
     color: theme.colors.text,
     backgroundColor: 'transparent',
+  },
+  inputDisabled: {
+    opacity: 0.6,
   },
   btnSave: {
     width: '100%',

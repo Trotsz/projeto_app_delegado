@@ -5,7 +5,7 @@ import { useAuthStore } from '../store/useAuthStore';
 
 function getBaseUrl(): string {
   if (!__DEV__) {
-    return 'https://your-production-url.com';
+    return process.env.EXPO_PUBLIC_API_URL;
   }
 
   // On physical devices, try to get the computer's IP from the Expo bundler URL

@@ -4,19 +4,57 @@ import jwt from 'jsonwebtoken';
 
 class UserService {
   async create(data: any) {
-    const hashedPassword = await bcrypt.hash(data.hashedPassword, 10);
-    return userRepository.create({ ...data, hashedPassword });
+    if (data.password.length < 8)
+      throw new Error('Your password must contain at least 8 characters');
+
+    const plen = data.password.length;
+
+    let containsNumber = false;
+    for (let i = 0; i < plen; i++) {
+      const asciiCode = data.password.charCodeAt(i);
+      if (asciiCode >= 48 && asciiCode <= 57) {
+        containsNumber = true;
+        break;
+      }
+    }
+    if (!containsNumber) throw new Error('Your password must contain at least 1 number');
+
+    let containsUCLetter = false;
+    for (let i = 0; i < plen; i++) {
+      const asciiCode = data.password.charCodeAt(i);
+      if (asciiCode >= 65 && asciiCode <= 90) {
+        containsUCLetter = true;
+        break;
+      }
+    }
+    if (!containsUCLetter)
+      throw new Error('Your password must contain at least 1 upper case letter');
+
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+    return userRepository.create({
+      name: data.name,
+      email: data.email,
+      role: data.role ?? 'USER',
+      hashedPassword,
+    });
   }
 
   async login(data: any) {
     const user = await this.findByEmail(data.email);
     if (user == null) throw new Error('There is no registered user with that email');
-    const res = await bcrypt.compare(data.password, user.hashedPassword);
-    if (res == null) throw new Error('Invalid credentials');
+
+    const hashedPassword = user.hashedPassword;
+    if (hashedPassword == null) throw new Error('Invalid credentials');
+
+    const isValid = await bcrypt.compare(data.password, hashedPassword);
+    if (!isValid) throw new Error('Invalid credentials');
+
+    const secret = process.env.JWT_SECRET;
+    if (!secret) throw new Error('Server misconfiguration');
 
     const token = jwt.sign(
-      { id: user.id, email: user.email, role: user.role },
-      process.env.JWT_SECRET,
+      { id: user.id, name: user.name, email: user.email, role: user.role },
+      secret,
       { expiresIn: '4d' },
     );
 
@@ -29,6 +67,10 @@ class UserService {
 
   async findByEmail(email: string | string[] | undefined) {
     return userRepository.findByEmail(email);
+  }
+
+  async update(id: string, data: { name?: string }) {
+    return userRepository.update(id, data);
   }
 }
 

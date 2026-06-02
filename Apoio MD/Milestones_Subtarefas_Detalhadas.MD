@@ -64,17 +64,17 @@ Este documento aprofunda o arquivo de Milestones e Issues, quebrando cada Issue 
 
 ### 📄 Issue 2.4: Módulo de Demandas (CRUD)
 
-- [ ] Escrever classes/funções do `DemandaRepository` (find, create, update, delete).
-- [ ] Escrever lógica no `DemandaService`.
-- [ ] Expor endpoints de Demanda no `DemandaController`.
-- [ ] Criar _Middleware_ de Autenticação para proteger as rotas de criação/edição.
+- [x] Escrever classes/funções do `DemandaRepository` (find, create, update, delete).
+- [x] Escrever lógica no `DemandaService`.
+- [x] Expor endpoints de Demanda no `DemandaController`.
+- [x] Criar _Middleware_ de Autenticação para proteger as rotas de criação/edição.
 
 ### 🧪 Issue 2.5: Testes de Integração Backend
 
-- [ ] Instalar `jest`, `ts-jest` e `supertest`.
-- [ ] Configurar o `jest.config.js`.
-- [ ] Escrever teste para o ciclo de Login (retorna JWT?).
-- [ ] Escrever teste para rotas protegidas (Rejeita sem token?).
+- [x] Instalar `supertest` e `@types/supertest`.
+- [x] Configurar o `jest.config.js`.
+- [x] Escrever teste para o ciclo de Login (retorna JWT?).
+- [x] Escrever teste para rotas protegidas (Rejeita sem token?).
 
 ---
 

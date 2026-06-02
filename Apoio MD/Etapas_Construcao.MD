@@ -15,30 +15,30 @@ Este documento organiza o passo a passo de desenvolvimento do projeto, dividindo
 
 ## 🗄️ Fase 2: Desenvolvimento do Backend (API & Dados)
 
-- [ ] Conectar e inicializar o **Prisma ORM** com o banco PostgreSQL.
-- [ ] Desenhar e criar as _Migrations_ refletindo o modelo de negócios (Usuários, Demandas, Status e possíveis Imagens).
-- [ ] Implementar a estrutura base seguindo a regra da equipe: **Controller → Service → Repository**.
-- [ ] Desenvolver módulo de Autenticação com **JWT** e criptografia de senhas (**bcrypt**).
-- [ ] Desenvolver APIs de criação, leitura, atualização e exclusão (CRUD) das Demandas.
-- [ ] Definir regras de permissão (Usuário comum vs. Admin/Gestor da demanda).
-- [ ] Escrever testes de API utilizando **Supertest + Jest**.
+- [x] Conectar e inicializar o **Prisma ORM** com o banco PostgreSQL.
+- [x] Desenhar e criar as _Migrations_ refletindo o modelo de negócios (Usuários, Demandas, Status e possíveis Imagens).
+- [x] Implementar a estrutura base seguindo a regra da equipe: **Controller → Service → Repository**.
+- [x] Desenvolver módulo de Autenticação com **JWT** e criptografia de senhas (**bcrypt**).
+- [x] Desenvolver APIs de criação, leitura, atualização e exclusão (CRUD) das Demandas.
+- [x] Definir regras de permissão (Usuário comum vs. Admin/Gestor da demanda).
+- [x] Escrever testes de API utilizando **Supertest + Jest**.
 
 ## 📱 Fase 3: Desenvolvimento do Frontend (Arquitetura Visual e Telas)
 
-- [ ] Configurar o **Styled Components** (ou StyleSheet nativo externalizado) para assegurar o fluxo de trabalho **sem CSS Inline**.
-- [ ] Traduzir o Design System gerado para componentes React Native puros (Tipografia _Inter_, _Material Symbols_, Botões, Inputs, Cards).
-- [ ] Estruturar a navegação principal da interface (Abas: Acompanhamento, Nova Demanda, Alertas/Notificações e Perfil).
-- [ ] Criar todas as telas e fluxos de forma estática (Mockados visualmente).
-- [ ] Configurar o **Zustand** para o estado global (tema, dados provisórios ou informações da sessão).
+- [x] Configurar o **Styled Components** (ou StyleSheet nativo externalizado) para assegurar o fluxo de trabalho **sem CSS Inline**.
+- [x] Traduzir o Design System gerado para componentes React Native puros (Tipografia _Inter_, _Material Symbols_, Botões, Inputs, Cards).
+- [x] Estruturar a navegação principal da interface (Abas: Acompanhamento, Nova Demanda e Perfil).
+- [x] Criar todas as telas e fluxos de forma estática (Mockados visualmente).
+- [x] Configurar o **Zustand** para o estado global (tema, dados provisórios ou informações da sessão).
 
 ## 🔗 Fase 4: Integração, Dados e Cache
 
-- [ ] Configurar cliente de requisições web utilizando o **Axios** (criando interceptors para passar o token JWT).
-- [ ] Implementar o **React Query (TanStack Query)** para trazer a lista de demandas, realizar cache inteligente e mutações consistentes.
-- [ ] Configurar o local storage com o **MMKV** para máxima performance.
-- [ ] Desenvolver a lógica "Offline First" (Salvando demandas em rascunho com o MMKV se o usuário peder conexão durante a criação).
-- [ ] Integrar sistema de Autenticação (Login, Cadastro).
-- [ ] Integrar fluxos reais do App: Criar e Acompanhar o Status das demandas consultando o Backend.
+- [x] Configurar cliente de requisições web utilizando o **Axios** (criando interceptors para passar o token JWT).
+- [x] Implementar o **React Query (TanStack Query)** para trazer a lista de demandas, realizar cache inteligente e mutações consistentes.
+- [ ] Configurar o local storage com o **MMKV** para máxima performance (requer dev build).
+- [ ] Desenvolver a lógica "Offline First" (Salvando demandas em rascunho com o MMKV se o usuário perder conexão durante a criação).
+- [x] Integrar sistema de Autenticação (Login).
+- [x] Integrar fluxos reais do App: Criar e Acompanhar o Status das demandas consultando o Backend.
 
 ## 🔔 Fase 5: Funcionalidades Avançadas e Refinamento
 

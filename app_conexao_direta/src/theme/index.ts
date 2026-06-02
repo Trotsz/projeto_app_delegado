@@ -1,0 +1,72 @@
+import type { TextStyle } from 'react-native';
+
+export const theme = {
+  colors: {
+    primary: '#1a1f5e',
+    primaryDark: '#12164a',
+    accent: '#f97316',
+    accentHover: '#ea6c0a',
+    bluePill: '#3b5bdb',
+    green: '#22c55e',
+    greenDark: '#16a34a',
+    red: '#ef4444',
+    yellow: '#f59e0b',
+    surface: '#ffffff',
+    surfaceAlt: '#f3f4f6',
+    border: '#e5e7eb',
+    text: '#111827',
+    textMuted: '#6b7280',
+    textLight: '#9ca3af',
+    white: '#ffffff',
+  },
+  fonts: {
+    regular: 'Inter_400Regular' as TextStyle['fontFamily'],
+    medium: 'Inter_500Medium' as TextStyle['fontFamily'],
+    bold: 'Inter_700Bold' as TextStyle['fontFamily'],
+  },
+  fontSize: {
+    xs: 11,
+    sm: 13,
+    base: 15,
+    md: 17,
+    lg: 20,
+    xl: 24,
+    xxl: 28,
+  },
+  spacing: {
+    xs: 4,
+    sm: 8,
+    md: 16,
+    lg: 24,
+    xl: 32,
+  },
+  borderRadius: {
+    sm: 8,
+    md: 12,
+    lg: 16,
+    full: 9999,
+  },
+  shadow: {
+    sm: {
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 1 },
+      shadowOpacity: 0.08,
+      shadowRadius: 3,
+      elevation: 2,
+    },
+    md: {
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.1,
+      shadowRadius: 12,
+      elevation: 4,
+    },
+    lg: {
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 8 },
+      shadowOpacity: 0.14,
+      shadowRadius: 24,
+      elevation: 8,
+    },
+  },
+};

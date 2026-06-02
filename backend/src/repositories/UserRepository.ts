@@ -16,6 +16,13 @@ class UserRepository {
       },
     });
   }
+
+  async update(id: string, data: { name?: string }) {
+    return prisma.user.update({
+      where: { id },
+      data,
+    });
+  }
 }
 
 export default new UserRepository();

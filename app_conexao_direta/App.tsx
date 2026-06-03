@@ -4,6 +4,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useAuthStore } from './src/store/useAuthStore';
 import { loadAuth } from './src/store/secureStorage';
+import WelcomeScreen from './src/screens/Welcome';
 import LoginScreen from './src/screens/Login';
 import CadastroScreen from './src/screens/Cadastro';
 import TabNavigator from './src/components/TabNavigator';
@@ -12,7 +13,7 @@ const queryClient = new QueryClient();
 
 export default function App() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  const [screen, setScreen] = useState<'login' | 'cadastro'>('login');
+  const [rootScreen, setRootScreen] = useState<'welcome' | 'login' | 'cadastro'>('welcome');
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
@@ -30,10 +31,15 @@ export default function App() {
             <ActivityIndicator size="large" />
           </View>
         ) : !isAuthenticated ? (
-          screen === 'login' ? (
-            <LoginScreen onNavigateToCadastro={() => setScreen('cadastro')} />
+          rootScreen === 'welcome' ? (
+            <WelcomeScreen
+              onNavigateToLogin={() => setRootScreen('login')}
+              onNavigateToCadastro={() => setRootScreen('cadastro')}
+            />
+          ) : rootScreen === 'login' ? (
+            <LoginScreen onNavigateToCadastro={() => setRootScreen('cadastro')} />
           ) : (
-            <CadastroScreen onNavigateToLogin={() => setScreen('login')} />
+            <CadastroScreen onNavigateToLogin={() => setRootScreen('login')} />
           )
         ) : (
           <TabNavigator />

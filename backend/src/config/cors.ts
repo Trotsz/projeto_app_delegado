@@ -1,6 +1,6 @@
 const allowedOrigins = {
-  production: ['https://projetoappdelegado.vercel.app/'],
-  development: ['http://localhost:8081'],
+  production: ['https://projetoappdelegado.vercel.app'],
+  development: ['http://localhost:8081', 'http://127.0.0.1:8081'],
 };
 
 const origins =

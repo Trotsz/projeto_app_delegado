@@ -83,8 +83,7 @@ class UserController {
       res.json({ message: 'Senha alterada com sucesso' });
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Internal server error';
-      const status = message === 'Senha atual incorreta' ? 401 : 400;
-      res.status(status).json({ message });
+      res.status(400).json({ message });
     }
   }
 }

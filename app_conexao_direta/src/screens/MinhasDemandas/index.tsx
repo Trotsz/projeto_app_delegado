@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuthStore } from '../../store/useAuthStore';
-import { useDemands } from '../../services/queries/useDemands';
+import { useDemands, useDeleteDemand } from '../../services/queries/useDemands';
 import { theme } from '../../theme';
 
 const tabs = [
@@ -26,6 +26,8 @@ export default function MinhasDemandasScreen({ onGoBack }: MinhasDemandasScreenP
   const user = useAuthStore((state) => state.user);
   const { data: demands, isLoading } = useDemands(undefined, user?.id);
   const [activeTab, setActiveTab] = useState('all');
+  const [confirmingDeleteId, setConfirmingDeleteId] = useState<number | null>(null);
+  const deleteDemand = useDeleteDemand();
 
   const filtered = demands?.filter((d) => {
     if (activeTab === 'all') return true;
@@ -73,7 +75,7 @@ export default function MinhasDemandasScreen({ onGoBack }: MinhasDemandasScreenP
         renderItem={({ item }) => {
           const badge = statusBadge[item.status] || statusBadge.SOLVED;
           return (
-            <TouchableOpacity style={styles.demandItem} activeOpacity={0.7}>
+            <View style={styles.demandItem}>
               <View style={styles.demandIcon}>
                 <Text style={styles.demandIconText}>📌</Text>
               </View>
@@ -96,7 +98,29 @@ export default function MinhasDemandasScreen({ onGoBack }: MinhasDemandasScreenP
                   </Text>
                 )}
               </View>
-            </TouchableOpacity>
+              {confirmingDeleteId === item.id ? (
+                <View style={styles.deleteConfirm}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      deleteDemand.mutate(item.id);
+                      setConfirmingDeleteId(null);
+                    }}
+                  >
+                    <Text style={styles.deleteConfirmYes}>Sim</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => setConfirmingDeleteId(null)}>
+                    <Text style={styles.deleteConfirmNo}>Não</Text>
+                  </TouchableOpacity>
+                </View>
+              ) : (
+                <TouchableOpacity
+                  style={styles.deleteBtn}
+                  onPress={() => setConfirmingDeleteId(item.id)}
+                >
+                  <Text style={styles.deleteBtnText}>🗑️</Text>
+                </TouchableOpacity>
+              )}
+            </View>
           );
         }}
         ListEmptyComponent={
@@ -182,6 +206,7 @@ const styles = StyleSheet.create({
   },
   demandItem: {
     flexDirection: 'row',
+    alignItems: 'center',
     gap: theme.spacing.sm,
     padding: theme.spacing.md,
     borderBottomWidth: 1,
@@ -269,5 +294,26 @@ const styles = StyleSheet.create({
   fabIcon: {
     fontSize: 28,
     color: theme.colors.white,
+  },
+  deleteBtn: {
+    padding: theme.spacing.sm,
+  },
+  deleteBtnText: {
+    fontSize: 18,
+  },
+  deleteConfirm: {
+    flexDirection: 'row',
+    gap: theme.spacing.sm,
+    alignItems: 'center',
+  },
+  deleteConfirmYes: {
+    fontFamily: theme.fonts.bold,
+    fontSize: theme.fontSize.sm,
+    color: theme.colors.red,
+  },
+  deleteConfirmNo: {
+    fontFamily: theme.fonts.bold,
+    fontSize: theme.fontSize.sm,
+    color: theme.colors.textMuted,
   },
 });

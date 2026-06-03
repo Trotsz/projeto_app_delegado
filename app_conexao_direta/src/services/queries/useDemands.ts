@@ -40,3 +40,16 @@ export function useCreateDemand() {
     },
   });
 }
+
+export function useDeleteDemand() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (id: number) => {
+      await api.delete(`/demand/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['demands'] });
+    },
+  });
+}

@@ -46,8 +46,9 @@ export default function NovaDemandaScreen({ onNavigateToTab }: Props) {
     try {
       await createDemand({ title, description, category: selectedCategory });
       setStep('success');
-    } catch {
-      Alert.alert('Erro', 'Não foi possível criar a demanda');
+    } catch (err) {
+      const message = (err as any)?.response?.data?.message || 'Não foi possível criar a demanda';
+      Alert.alert('Erro', message);
     }
   }
 

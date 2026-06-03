@@ -36,8 +36,10 @@ export default function DadosPessoaisScreen({ onGoBack }: DadosPessoaisScreenPro
       const { data } = await api.put('/user/profile', { name });
       if (token) setAuth(token, data);
       Alert.alert('Sucesso', 'Dados atualizados com sucesso');
-    } catch {
-      Alert.alert('Erro', 'Não foi possível atualizar os dados');
+    } catch (err) {
+      const message =
+        (err as any)?.response?.data?.message || 'Não foi possível atualizar os dados';
+      Alert.alert('Erro', message);
     } finally {
       setLoading(false);
     }

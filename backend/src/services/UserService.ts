@@ -4,8 +4,7 @@ import jwt from 'jsonwebtoken';
 
 class UserService {
   async create(data: any) {
-    if (data.password.length < 8)
-      throw new Error('Your password must contain at least 8 characters');
+    if (data.password.length < 8) throw new Error('Sua senha deve conter pelo menos 8 caracteres');
 
     const plen = data.password.length;
 
@@ -17,7 +16,7 @@ class UserService {
         break;
       }
     }
-    if (!containsNumber) throw new Error('Your password must contain at least 1 number');
+    if (!containsNumber) throw new Error('Sua senha deve conter pelo menos 1 número');
 
     let containsUCLetter = false;
     for (let i = 0; i < plen; i++) {
@@ -27,8 +26,7 @@ class UserService {
         break;
       }
     }
-    if (!containsUCLetter)
-      throw new Error('Your password must contain at least 1 upper case letter');
+    if (!containsUCLetter) throw new Error('Sua senha deve conter pelo menos 1 letra maiúscula');
 
     const hashedPassword = await bcrypt.hash(data.password, 10);
     return userRepository.create({
@@ -71,6 +69,39 @@ class UserService {
 
   async update(id: string, data: { name?: string }) {
     return userRepository.update(id, data);
+  }
+
+  async changePassword(id: string, currentPassword: string, newPassword: string) {
+    const user = await userRepository.findById(id);
+    if (!user || !user.hashedPassword) throw new Error('Usuário não encontrado');
+
+    const isValid = await bcrypt.compare(currentPassword, user.hashedPassword);
+    if (!isValid) throw new Error('Senha atual incorreta');
+
+    if (newPassword.length < 8) throw new Error('Sua senha deve conter pelo menos 8 caracteres');
+
+    let containsNumber = false;
+    for (let i = 0; i < newPassword.length; i++) {
+      const asciiCode = newPassword.charCodeAt(i);
+      if (asciiCode >= 48 && asciiCode <= 57) {
+        containsNumber = true;
+        break;
+      }
+    }
+    if (!containsNumber) throw new Error('Sua senha deve conter pelo menos 1 número');
+
+    let containsUCLetter = false;
+    for (let i = 0; i < newPassword.length; i++) {
+      const asciiCode = newPassword.charCodeAt(i);
+      if (asciiCode >= 65 && asciiCode <= 90) {
+        containsUCLetter = true;
+        break;
+      }
+    }
+    if (!containsUCLetter) throw new Error('Sua senha deve conter pelo menos 1 letra maiúscula');
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    return userRepository.update(id, { hashedPassword });
   }
 }
 

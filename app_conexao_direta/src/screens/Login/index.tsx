@@ -52,8 +52,8 @@ export default function LoginScreen({ onNavigateToCadastro }: Props) {
       setAuth(data, user);
       await saveAuth({ token: data, user });
     } catch (err) {
-      console.log('Login error:', err);
-      Alert.alert('Erro', 'Email ou senha inválidos');
+      const message = (err as any)?.response?.data?.message || 'Email ou senha inválidos';
+      Alert.alert('Erro', message);
     } finally {
       setLoading(false);
     }

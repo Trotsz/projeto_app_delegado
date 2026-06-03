@@ -53,8 +53,9 @@ export default function AlterarSenhaScreen({ onGoBack }: AlterarSenhaScreenProps
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
-    } catch {
-      Alert.alert('Erro', 'Não foi possível alterar a senha');
+    } catch (err) {
+      const message = (err as any)?.response?.data?.message || 'Não foi possível alterar a senha';
+      Alert.alert('Erro', message);
     } finally {
       setLoading(false);
     }

@@ -68,6 +68,25 @@ class UserController {
       res.status(500).json({ message: 'Internal server error' });
     }
   }
+
+  async changePassword(req: Request, res: Response) {
+    try {
+      const userId = req.user!.id;
+      const { currentPassword, newPassword } = req.body;
+
+      if (!currentPassword || !newPassword) {
+        res.status(400).json({ message: 'Preencha todos os campos' });
+        return;
+      }
+
+      await userService.changePassword(userId, currentPassword, newPassword);
+      res.json({ message: 'Senha alterada com sucesso' });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Internal server error';
+      const status = message === 'Senha atual incorreta' ? 401 : 400;
+      res.status(status).json({ message });
+    }
+  }
 }
 
 export default new UserController();

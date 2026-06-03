@@ -39,8 +39,9 @@ export default function CadastroScreen({ onNavigateToLogin }: Props) {
       await api.post('/user/register', { name, email, password });
       Alert.alert('Sucesso', 'Conta criada com sucesso!');
       onNavigateToLogin?.();
-    } catch {
-      Alert.alert('Erro', 'Não foi possível criar a conta');
+    } catch (err) {
+      const message = (err as any)?.response?.data?.message || 'Não foi possível criar a conta';
+      Alert.alert('Erro', message);
     } finally {
       setLoading(false);
     }

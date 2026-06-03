@@ -1,13 +1,5 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  ScrollView,
-  TouchableOpacity,
-  Alert,
-  StyleSheet,
-} from 'react-native';
+import { View, Text, TextInput, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuthStore } from '../../store/useAuthStore';
 import api from '../../services/api';
@@ -22,24 +14,26 @@ export default function DadosPessoaisScreen({ onGoBack }: DadosPessoaisScreenPro
   const user = useAuthStore((state) => state.user);
   const [name, setName] = useState(user?.name || '');
   const [loading, setLoading] = useState(false);
+  const [apiError, setApiError] = useState('');
+  const [apiSuccess, setApiSuccess] = useState('');
   const token = useAuthStore((state) => state.token);
   const setAuth = useAuthStore((state) => state.setAuth);
 
   async function handleSave() {
     if (!name.trim()) {
-      Alert.alert('Erro', 'Preencha o nome');
+      setApiError('Preencha o nome');
       return;
     }
 
+    setApiError('');
+    setApiSuccess('');
     setLoading(true);
     try {
       const { data } = await api.put('/user/profile', { name });
       if (token) setAuth(token, data);
-      Alert.alert('Sucesso', 'Dados atualizados com sucesso');
+      setApiSuccess('Dados atualizados com sucesso');
     } catch (err) {
-      const message =
-        (err as any)?.response?.data?.message || 'Não foi possível atualizar os dados';
-      Alert.alert('Erro', message);
+      setApiError((err as any)?.response?.data?.message || 'Não foi possível atualizar os dados');
     } finally {
       setLoading(false);
     }
@@ -95,6 +89,9 @@ export default function DadosPessoaisScreen({ onGoBack }: DadosPessoaisScreenPro
           placeholderTextColor={theme.colors.textLight}
         />
       </View>
+
+      {apiError ? <Text style={styles.apiErrorText}>{apiError}</Text> : null}
+      {apiSuccess ? <Text style={styles.apiSuccessText}>{apiSuccess}</Text> : null}
 
       <TouchableOpacity
         style={[styles.btnSave, loading && styles.btnDisabled]}
@@ -218,6 +215,28 @@ const styles = StyleSheet.create({
   },
   inputDisabled: {
     opacity: 0.6,
+  },
+  apiErrorText: {
+    color: theme.colors.red,
+    fontFamily: theme.fonts.medium,
+    fontSize: theme.fontSize.sm,
+    textAlign: 'center',
+    marginBottom: theme.spacing.sm,
+    backgroundColor: 'rgba(255,0,0,0.1)',
+    paddingVertical: theme.spacing.sm,
+    paddingHorizontal: theme.spacing.md,
+    borderRadius: theme.borderRadius.sm,
+  },
+  apiSuccessText: {
+    color: theme.colors.green,
+    fontFamily: theme.fonts.medium,
+    fontSize: theme.fontSize.sm,
+    textAlign: 'center',
+    marginBottom: theme.spacing.sm,
+    backgroundColor: 'rgba(0,255,0,0.1)',
+    paddingVertical: theme.spacing.sm,
+    paddingHorizontal: theme.spacing.md,
+    borderRadius: theme.borderRadius.sm,
   },
   btnSave: {
     width: '100%',

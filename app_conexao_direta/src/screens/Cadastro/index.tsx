@@ -5,7 +5,6 @@ import {
   TextInput,
   ScrollView,
   TouchableOpacity,
-  Alert,
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
@@ -26,6 +25,7 @@ export default function CadastroScreen({ onNavigateToLogin }: Props) {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({ name: false, email: false, password: false });
+  const [apiError, setApiError] = useState('');
 
   async function handleRegister() {
     const newErrors = { name: !name, email: !email, password: !password };
@@ -34,14 +34,13 @@ export default function CadastroScreen({ onNavigateToLogin }: Props) {
       return;
     }
 
+    setApiError('');
     setLoading(true);
     try {
       await api.post('/user/register', { name, email, password });
-      Alert.alert('Sucesso', 'Conta criada com sucesso!');
       onNavigateToLogin?.();
     } catch (err) {
-      const message = (err as any)?.response?.data?.message || 'Não foi possível criar a conta';
-      Alert.alert('Erro', message);
+      setApiError((err as any)?.response?.data?.message || 'Não foi possível criar a conta');
     } finally {
       setLoading(false);
     }
@@ -114,6 +113,8 @@ export default function CadastroScreen({ onNavigateToLogin }: Props) {
           </TouchableOpacity>
         </View>
         {errors.password && <Text style={styles.errorText}>Senha é obrigatória</Text>}
+
+        {apiError ? <Text style={styles.apiErrorText}>{apiError}</Text> : null}
 
         <TouchableOpacity
           style={[styles.btnRegister, loading && styles.btnDisabled]}
@@ -233,6 +234,17 @@ const styles = StyleSheet.create({
     fontSize: theme.fontSize.xs,
     marginTop: -theme.spacing.sm,
     marginBottom: theme.spacing.md,
+  },
+  apiErrorText: {
+    color: theme.colors.red,
+    fontFamily: theme.fonts.medium,
+    fontSize: theme.fontSize.sm,
+    textAlign: 'center',
+    marginBottom: theme.spacing.md,
+    backgroundColor: 'rgba(255,0,0,0.1)',
+    paddingVertical: theme.spacing.sm,
+    paddingHorizontal: theme.spacing.md,
+    borderRadius: theme.borderRadius.sm,
   },
   eyeBtn: {
     position: 'absolute',

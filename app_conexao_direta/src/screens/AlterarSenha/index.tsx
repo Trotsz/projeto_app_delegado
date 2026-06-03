@@ -1,13 +1,5 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  ScrollView,
-  TouchableOpacity,
-  Alert,
-  StyleSheet,
-} from 'react-native';
+import { View, Text, TextInput, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import api from '../../services/api';
 import { theme } from '../../theme';
@@ -24,6 +16,8 @@ export default function AlterarSenhaScreen({ onGoBack }: AlterarSenhaScreenProps
   const [loading, setLoading] = useState(false);
   const [showCurrent, setShowCurrent] = useState(false);
   const [showNew, setShowNew] = useState(false);
+  const [apiError, setApiError] = useState('');
+  const [apiSuccess, setApiSuccess] = useState('');
 
   function getRequirements() {
     const len = newPassword.length >= 8;
@@ -35,27 +29,28 @@ export default function AlterarSenhaScreen({ onGoBack }: AlterarSenhaScreenProps
   async function handleChange() {
     const reqs = getRequirements();
     if (!reqs.len || !reqs.num || !reqs.upper) {
-      Alert.alert('Erro', 'A senha não atende aos requisitos');
+      setApiError('A senha não atende aos requisitos');
       return;
     }
     if (newPassword !== confirmPassword) {
-      Alert.alert('Erro', 'As senhas não conferem');
+      setApiError('As senhas não conferem');
       return;
     }
 
+    setApiError('');
+    setApiSuccess('');
     setLoading(true);
     try {
       await api.put('/user/password', {
         currentPassword,
         newPassword,
       });
-      Alert.alert('Sucesso', 'Senha alterada com sucesso');
+      setApiSuccess('Senha alterada com sucesso');
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
     } catch (err) {
-      const message = (err as any)?.response?.data?.message || 'Não foi possível alterar a senha';
-      Alert.alert('Erro', message);
+      setApiError((err as any)?.response?.data?.message || 'Não foi possível alterar a senha');
     } finally {
       setLoading(false);
     }
@@ -147,6 +142,9 @@ export default function AlterarSenhaScreen({ onGoBack }: AlterarSenhaScreenProps
           secureTextEntry
         />
       </View>
+
+      {apiError ? <Text style={styles.apiErrorText}>{apiError}</Text> : null}
+      {apiSuccess ? <Text style={styles.apiSuccessText}>{apiSuccess}</Text> : null}
 
       <TouchableOpacity
         style={[styles.btnPrimary, loading && styles.btnDisabled]}
@@ -286,6 +284,28 @@ const styles = StyleSheet.create({
     fontFamily: theme.fonts.bold,
     fontSize: theme.fontSize.base,
     color: theme.colors.white,
+  },
+  apiErrorText: {
+    color: theme.colors.red,
+    fontFamily: theme.fonts.medium,
+    fontSize: theme.fontSize.sm,
+    textAlign: 'center',
+    marginBottom: theme.spacing.sm,
+    backgroundColor: 'rgba(255,0,0,0.1)',
+    paddingVertical: theme.spacing.sm,
+    paddingHorizontal: theme.spacing.md,
+    borderRadius: theme.borderRadius.sm,
+  },
+  apiSuccessText: {
+    color: theme.colors.green,
+    fontFamily: theme.fonts.medium,
+    fontSize: theme.fontSize.sm,
+    textAlign: 'center',
+    marginBottom: theme.spacing.sm,
+    backgroundColor: 'rgba(0,255,0,0.1)',
+    paddingVertical: theme.spacing.sm,
+    paddingHorizontal: theme.spacing.md,
+    borderRadius: theme.borderRadius.sm,
   },
   btnCancel: {
     width: '100%',

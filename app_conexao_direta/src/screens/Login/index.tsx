@@ -3,7 +3,6 @@ import {
   View,
   Text,
   TextInput,
-  Alert,
   ScrollView,
   TouchableOpacity,
   StyleSheet,
@@ -28,6 +27,7 @@ export default function LoginScreen({ onNavigateToCadastro }: Props) {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({ email: false, password: false });
+  const [apiError, setApiError] = useState('');
   const setAuth = useAuthStore((state) => state.setAuth);
 
   async function handleLogin() {
@@ -37,6 +37,7 @@ export default function LoginScreen({ onNavigateToCadastro }: Props) {
       return;
     }
 
+    setApiError('');
     setLoading(true);
     try {
       const { data } = await api.post('/user/login', { email, password });
@@ -52,8 +53,7 @@ export default function LoginScreen({ onNavigateToCadastro }: Props) {
       setAuth(data, user);
       await saveAuth({ token: data, user });
     } catch (err) {
-      const message = (err as any)?.response?.data?.message || 'Email ou senha inválidos';
-      Alert.alert('Erro', message);
+      setApiError((err as any)?.response?.data?.message || 'Email ou senha inválidos');
     } finally {
       setLoading(false);
     }
@@ -117,6 +117,8 @@ export default function LoginScreen({ onNavigateToCadastro }: Props) {
           </TouchableOpacity>
         </View>
         {errors.password && <Text style={styles.errorText}>Senha é obrigatória</Text>}
+
+        {apiError ? <Text style={styles.apiErrorText}>{apiError}</Text> : null}
 
         <TouchableOpacity
           style={[styles.btnLogin, loading && styles.btnDisabled]}
@@ -240,6 +242,17 @@ const styles = StyleSheet.create({
     fontSize: theme.fontSize.xs,
     marginTop: -theme.spacing.sm,
     marginBottom: theme.spacing.md,
+  },
+  apiErrorText: {
+    color: theme.colors.red,
+    fontFamily: theme.fonts.medium,
+    fontSize: theme.fontSize.sm,
+    textAlign: 'center',
+    marginBottom: theme.spacing.md,
+    backgroundColor: 'rgba(255,0,0,0.1)',
+    paddingVertical: theme.spacing.sm,
+    paddingHorizontal: theme.spacing.md,
+    borderRadius: theme.borderRadius.sm,
   },
   eyeButton: {
     padding: 4,

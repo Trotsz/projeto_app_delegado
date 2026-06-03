@@ -1,13 +1,5 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  ScrollView,
-  TouchableOpacity,
-  Alert,
-  StyleSheet,
-} from 'react-native';
+import { View, Text, TextInput, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useCreateDemand } from '../../services/queries/useDemands';
 import { theme } from '../../theme';
@@ -37,18 +29,20 @@ export default function NovaDemandaScreen({ onNavigateToTab }: Props) {
   const [description, setDescription] = useState('');
   const { mutateAsync: createDemand, isPending } = useCreateDemand();
 
+  const [apiError, setApiError] = useState('');
+
   async function handleSubmit() {
     if (!title.trim()) {
-      Alert.alert('Erro', 'O título é obrigatório');
+      setApiError('O título é obrigatório');
       return;
     }
 
+    setApiError('');
     try {
       await createDemand({ title, description, category: selectedCategory });
       setStep('success');
     } catch (err) {
-      const message = (err as any)?.response?.data?.message || 'Não foi possível criar a demanda';
-      Alert.alert('Erro', message);
+      setApiError((err as any)?.response?.data?.message || 'Não foi possível criar a demanda');
     }
   }
 
@@ -232,6 +226,8 @@ export default function NovaDemandaScreen({ onNavigateToTab }: Props) {
             <Text style={styles.attachIcon}>📎</Text>
             <Text style={styles.attachText}>Anexar imagem</Text>
           </TouchableOpacity>
+
+          {apiError ? <Text style={styles.apiErrorText}>{apiError}</Text> : null}
 
           <TouchableOpacity
             style={[styles.btnNext, isPending && styles.btnDisabled]}
@@ -466,6 +462,17 @@ const styles = StyleSheet.create({
     fontFamily: theme.fonts.medium,
     fontSize: theme.fontSize.base,
     color: theme.colors.text,
+  },
+  apiErrorText: {
+    color: theme.colors.red,
+    fontFamily: theme.fonts.medium,
+    fontSize: theme.fontSize.sm,
+    textAlign: 'center',
+    marginBottom: theme.spacing.sm,
+    backgroundColor: 'rgba(255,0,0,0.1)',
+    paddingVertical: theme.spacing.sm,
+    paddingHorizontal: theme.spacing.md,
+    borderRadius: theme.borderRadius.sm,
   },
   btnNext: {
     paddingVertical: 16,

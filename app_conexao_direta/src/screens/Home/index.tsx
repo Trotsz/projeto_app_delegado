@@ -19,9 +19,10 @@ const categories = [
 
 interface Props {
   onNavigateToTab?: (tab: string) => void;
+  onDemandPress?: (demandId: number) => void;
 }
 
-export default function HomeScreen({ onNavigateToTab }: Props) {
+export default function HomeScreen({ onNavigateToTab, onDemandPress }: Props) {
   const insets = useSafeAreaInsets();
   const [activeFilter, setActiveFilter] = React.useState('all');
   const { data: demands, isLoading } = useDemands(activeFilter);
@@ -131,7 +132,7 @@ export default function HomeScreen({ onNavigateToTab }: Props) {
         keyExtractor={(item) => String(item.id)}
         renderItem={({ item }) => (
           <View style={styles.cardWrapper}>
-            <CardDemanda demand={item} onPress={() => {}} />
+            <CardDemanda demand={item} onPress={() => onDemandPress?.(item.id)} />
           </View>
         )}
         ListEmptyComponent={

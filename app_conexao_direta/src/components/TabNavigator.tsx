@@ -7,6 +7,7 @@ import PerfilScreen from '../screens/Perfil';
 import DadosPessoaisScreen from '../screens/DadosPessoais';
 import MinhasDemandasScreen from '../screens/MinhasDemandas';
 import AlterarSenhaScreen from '../screens/AlterarSenha';
+import DemandDetailsScreen from '../screens/DemandDetails';
 import { theme } from '../theme';
 
 const tabs = [
@@ -21,13 +22,19 @@ export default function TabNavigator() {
   const insets = useSafeAreaInsets();
   const [activeTab, setActiveTab] = useState('home');
   const [profileSubScreen, setProfileSubScreen] = useState<string | null>(null);
+  const [demandDetailsId, setDemandDetailsId] = useState<number | null>(null);
 
   function renderProfileSubScreen() {
     switch (profileSubScreen) {
       case 'dados-pessoais':
         return <DadosPessoaisScreen onGoBack={() => setProfileSubScreen(null)} />;
       case 'minhas-demandas':
-        return <MinhasDemandasScreen onGoBack={() => setProfileSubScreen(null)} />;
+        return (
+          <MinhasDemandasScreen
+            onGoBack={() => setProfileSubScreen(null)}
+            onDemandPress={(id) => setDemandDetailsId(id)}
+          />
+        );
       case 'alterar-senha':
         return <AlterarSenhaScreen onGoBack={() => setProfileSubScreen(null)} />;
       default:
@@ -35,10 +42,21 @@ export default function TabNavigator() {
     }
   }
 
+  if (demandDetailsId !== null) {
+    return (
+      <DemandDetailsScreen demandId={demandDetailsId} onGoBack={() => setDemandDetailsId(null)} />
+    );
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        {activeTab === 'home' && <HomeScreen onNavigateToTab={setActiveTab} />}
+        {activeTab === 'home' && (
+          <HomeScreen
+            onNavigateToTab={setActiveTab}
+            onDemandPress={(id) => setDemandDetailsId(id)}
+          />
+        )}
         {activeTab === 'nova' && <NovaDemandaScreen onNavigateToTab={setActiveTab} />}
         {activeTab === 'perfil' && renderProfileSubScreen()}
         {activeTab === 'mapa' && (

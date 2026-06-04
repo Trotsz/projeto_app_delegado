@@ -41,6 +41,17 @@ export function useCreateDemand() {
   });
 }
 
+export function useDemandById(id: number) {
+  return useQuery<Demand>({
+    queryKey: ['demands', id],
+    queryFn: async () => {
+      const { data } = await api.get(`/demand/${id}`);
+      return data;
+    },
+    enabled: !!id,
+  });
+}
+
 export function useDeleteDemand() {
   const queryClient = useQueryClient();
 

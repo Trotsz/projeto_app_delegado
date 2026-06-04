@@ -19,9 +19,13 @@ const statusBadge = {
 
 interface MinhasDemandasScreenProps {
   onGoBack?: () => void;
+  onDemandPress?: (demandId: number) => void;
 }
 
-export default function MinhasDemandasScreen({ onGoBack }: MinhasDemandasScreenProps) {
+export default function MinhasDemandasScreen({
+  onGoBack,
+  onDemandPress,
+}: MinhasDemandasScreenProps) {
   const insets = useSafeAreaInsets();
   const user = useAuthStore((state) => state.user);
   const { data: demands, isLoading } = useDemands(undefined, user?.id);
@@ -76,28 +80,34 @@ export default function MinhasDemandasScreen({ onGoBack }: MinhasDemandasScreenP
           const badge = statusBadge[item.status] || statusBadge.SOLVED;
           return (
             <View style={styles.demandItem}>
-              <View style={styles.demandIcon}>
-                <Text style={styles.demandIconText}>📌</Text>
-              </View>
-              <View style={styles.demandBody}>
-                <View style={styles.demandHeader}>
-                  <Text style={styles.demandTitle}>{item.title}</Text>
-                  <View
-                    style={[
-                      styles.demandBadge,
-                      badge.style === 'inProgress' ? styles.badgeInProgress : styles.badgeSolved,
-                    ]}
-                  >
-                    <Text style={styles.demandBadgeText}>{badge.label}</Text>
-                  </View>
+              <TouchableOpacity
+                style={styles.demandContent}
+                activeOpacity={0.7}
+                onPress={() => onDemandPress?.(item.id)}
+              >
+                <View style={styles.demandIcon}>
+                  <Text style={styles.demandIconText}>📌</Text>
                 </View>
-                <Text style={styles.demandDate}>Hoje, 14:30</Text>
-                {item.description && (
-                  <Text style={styles.demandDesc} numberOfLines={2}>
-                    {item.description}
-                  </Text>
-                )}
-              </View>
+                <View style={styles.demandBody}>
+                  <View style={styles.demandHeader}>
+                    <Text style={styles.demandTitle}>{item.title}</Text>
+                    <View
+                      style={[
+                        styles.demandBadge,
+                        badge.style === 'inProgress' ? styles.badgeInProgress : styles.badgeSolved,
+                      ]}
+                    >
+                      <Text style={styles.demandBadgeText}>{badge.label}</Text>
+                    </View>
+                  </View>
+                  <Text style={styles.demandDate}>Hoje, 14:30</Text>
+                  {item.description && (
+                    <Text style={styles.demandDesc} numberOfLines={2}>
+                      {item.description}
+                    </Text>
+                  )}
+                </View>
+              </TouchableOpacity>
               {confirmingDeleteId === item.id ? (
                 <View style={styles.deleteConfirm}>
                   <TouchableOpacity
@@ -207,10 +217,15 @@ const styles = StyleSheet.create({
   demandItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: theme.spacing.sm,
-    padding: theme.spacing.md,
     borderBottomWidth: 1,
     borderBottomColor: theme.colors.border,
+  },
+  demandContent: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.sm,
+    padding: theme.spacing.md,
   },
   demandIcon: {
     width: 44,

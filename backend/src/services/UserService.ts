@@ -37,7 +37,7 @@ class UserService {
         hashedPassword,
       });
     } catch (err: any) {
-      if (err?.code === 'P2002') {
+      if (err?.code === 'P2002' || err?.message?.includes('Unique constraint')) {
         throw new Error('Este email já está cadastrado');
       }
       throw err;

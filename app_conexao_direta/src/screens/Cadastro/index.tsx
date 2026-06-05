@@ -46,7 +46,8 @@ export default function CadastroScreen({ onNavigateToLogin }: Props) {
       await api.post('/user/register', { name, email, password });
       onNavigateToLogin?.();
     } catch (err) {
-      const message = (err as any)?.response?.data?.message;
+      const raw = (err as any)?.response?.data?.message || '';
+      const message = raw.split('\n')[0].trim();
       setApiError(message || 'Não foi possível criar a conta');
     } finally {
       setLoading(false);

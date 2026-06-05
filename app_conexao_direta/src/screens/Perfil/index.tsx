@@ -37,7 +37,10 @@ export default function PerfilScreen({ onNavigateToSubScreen }: PerfilScreenProp
           <View style={styles.avatar}>
             <Text style={styles.avatarText}>{user?.name?.charAt(0)?.toUpperCase() || '?'}</Text>
           </View>
-          <TouchableOpacity style={styles.avatarEditBtn}>
+          <TouchableOpacity
+            style={styles.avatarEditBtn}
+            onPress={() => onNavigateToSubScreen?.('dados-pessoais')}
+          >
             <Text style={styles.avatarEditIcon}>✏️</Text>
           </TouchableOpacity>
         </View>

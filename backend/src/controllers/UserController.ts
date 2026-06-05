@@ -6,10 +6,20 @@ class UserController {
     try {
       await userService.create(req.body);
       res.status(201).json({ message: 'User created' });
-    } catch (err) {
-      const message = err instanceof Error ? err.message : 'Erro ao criar conta';
-      console.log('Error: ' + message);
-      res.status(400).json({ message });
+    } catch (err: any) {
+      const message = err?.message || '';
+      console.log('Error:', message);
+
+      if (
+        message.includes('Este email já está cadastrado') ||
+        message.includes('Unique constraint') ||
+        err?.code === 'P2002'
+      ) {
+        res.status(400).json({ message: 'Este email já está cadastrado' });
+        return;
+      }
+
+      res.status(400).json({ message: message || 'Erro ao criar conta' });
     }
   }
 

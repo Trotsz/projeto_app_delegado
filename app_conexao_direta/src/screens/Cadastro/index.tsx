@@ -27,8 +27,14 @@ export default function CadastroScreen({ onNavigateToLogin }: Props) {
   const [errors, setErrors] = useState({ name: false, email: false, password: false });
   const [apiError, setApiError] = useState('');
 
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
   async function handleRegister() {
-    const newErrors = { name: !name, email: !email, password: !password };
+    const newErrors = {
+      name: !name,
+      email: !email || !emailRegex.test(email),
+      password: !password,
+    };
     setErrors(newErrors);
     if (newErrors.name || newErrors.email || newErrors.password) {
       return;
@@ -40,7 +46,8 @@ export default function CadastroScreen({ onNavigateToLogin }: Props) {
       await api.post('/user/register', { name, email, password });
       onNavigateToLogin?.();
     } catch (err) {
-      setApiError((err as any)?.response?.data?.message || 'Não foi possível criar a conta');
+      const message = (err as any)?.response?.data?.message;
+      setApiError(message || 'Não foi possível criar a conta');
     } finally {
       setLoading(false);
     }
@@ -93,7 +100,11 @@ export default function CadastroScreen({ onNavigateToLogin }: Props) {
           keyboardType="email-address"
           autoCapitalize="none"
         />
-        {errors.email && <Text style={styles.errorText}>Email é obrigatório</Text>}
+        {errors.email && (
+          <Text style={styles.errorText}>
+            {email ? 'Formato de email inválido' : 'Email é obrigatório'}
+          </Text>
+        )}
 
         <Text style={styles.label}>Senha</Text>
         <View style={styles.passwordWrapper}>

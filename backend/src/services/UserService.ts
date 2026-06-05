@@ -29,12 +29,19 @@ class UserService {
     if (!containsUCLetter) throw new Error('Sua senha deve conter pelo menos 1 letra maiúscula');
 
     const hashedPassword = await bcrypt.hash(data.password, 10);
-    return userRepository.create({
-      name: data.name,
-      email: data.email,
-      role: data.role ?? 'USER',
-      hashedPassword,
-    });
+    try {
+      return await userRepository.create({
+        name: data.name,
+        email: data.email,
+        role: data.role ?? 'USER',
+        hashedPassword,
+      });
+    } catch (err: any) {
+      if (err?.code === 'P2002') {
+        throw new Error('Este email já está cadastrado');
+      }
+      throw err;
+    }
   }
 
   async login(data: any) {

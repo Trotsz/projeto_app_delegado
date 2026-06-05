@@ -61,9 +61,6 @@ export default function DadosPessoaisScreen({ onGoBack }: DadosPessoaisScreenPro
           </TouchableOpacity>
         </View>
         <Text style={styles.name}>{user?.name || 'Usuário'}</Text>
-        <TouchableOpacity>
-          <Text style={styles.changePhoto}>Alterar foto</Text>
-        </TouchableOpacity>
       </View>
 
       <Text style={styles.label}>Nome completo</Text>
@@ -178,11 +175,6 @@ const styles = StyleSheet.create({
     color: theme.colors.text,
     marginTop: theme.spacing.sm,
     marginBottom: 4,
-  },
-  changePhoto: {
-    fontFamily: theme.fonts.medium,
-    fontSize: theme.fontSize.sm,
-    color: theme.colors.primary,
   },
   label: {
     fontFamily: theme.fonts.medium,

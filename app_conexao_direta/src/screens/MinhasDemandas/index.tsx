@@ -20,11 +20,13 @@ const statusBadge = {
 interface MinhasDemandasScreenProps {
   onGoBack?: () => void;
   onDemandPress?: (demandId: number) => void;
+  onNavigateToTab?: (tab: string) => void;
 }
 
 export default function MinhasDemandasScreen({
   onGoBack,
   onDemandPress,
+  onNavigateToTab,
 }: MinhasDemandasScreenProps) {
   const insets = useSafeAreaInsets();
   const user = useAuthStore((state) => state.user);
@@ -141,7 +143,10 @@ export default function MinhasDemandasScreen({
         contentContainerStyle={[styles.listContent, { paddingBottom: insets.bottom + 80 }]}
       />
 
-      <TouchableOpacity style={[styles.fab, { bottom: insets.bottom + 24 }]}>
+      <TouchableOpacity
+        style={[styles.fab, { bottom: insets.bottom + 24 }]}
+        onPress={() => onNavigateToTab?.('nova')}
+      >
         <Text style={styles.fabIcon}>+</Text>
       </TouchableOpacity>
     </View>

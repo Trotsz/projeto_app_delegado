@@ -33,6 +33,7 @@ export default function TabNavigator() {
           <MinhasDemandasScreen
             onGoBack={() => setProfileSubScreen(null)}
             onDemandPress={(id) => setDemandDetailsId(id)}
+            onNavigateToTab={setActiveTab}
           />
         );
       case 'alterar-senha':

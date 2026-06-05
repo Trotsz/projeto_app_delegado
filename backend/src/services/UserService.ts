@@ -28,20 +28,18 @@ class UserService {
     }
     if (!containsUCLetter) throw new Error('Sua senha deve conter pelo menos 1 letra maiúscula');
 
-    const hashedPassword = await bcrypt.hash(data.password, 10);
-    try {
-      return await userRepository.create({
-        name: data.name,
-        email: data.email,
-        role: data.role ?? 'USER',
-        hashedPassword,
-      });
-    } catch (err: any) {
-      if (err?.code === 'P2002' || err?.message?.includes('Unique constraint')) {
-        throw new Error('Este email já está cadastrado');
-      }
-      throw err;
+    const existing = await userRepository.findByEmail(data.email);
+    if (existing) {
+      throw new Error('Este email já está cadastrado');
     }
+
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+    return userRepository.create({
+      name: data.name,
+      email: data.email,
+      role: data.role ?? 'USER',
+      hashedPassword,
+    });
   }
 
   async login(data: any) {

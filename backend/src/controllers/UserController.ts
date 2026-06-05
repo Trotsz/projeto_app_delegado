@@ -7,7 +7,7 @@ class UserController {
       await userService.create(req.body);
       res.status(201).json({ message: 'User created' });
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Unknown error';
+      const message = err instanceof Error ? err.message : 'Erro ao criar conta';
       console.log('Error: ' + message);
       res.status(400).json({ message });
     }

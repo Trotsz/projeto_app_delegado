@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useAuthStore } from '../store/useAuthStore';
 import HomeScreen from '../screens/Home';
 import NovaDemandaScreen from '../screens/NovaDemanda';
 import PerfilScreen from '../screens/Perfil';
@@ -8,6 +9,7 @@ import DadosPessoaisScreen from '../screens/DadosPessoais';
 import MinhasDemandasScreen from '../screens/MinhasDemandas';
 import AlterarSenhaScreen from '../screens/AlterarSenha';
 import DemandDetailsScreen from '../screens/DemandDetails';
+import AprovarDemandasScreen from '../screens/AprovarDemandas';
 import { theme } from '../theme';
 
 const tabs = [
@@ -20,6 +22,8 @@ const tabs = [
 
 export default function TabNavigator() {
   const insets = useSafeAreaInsets();
+  const user = useAuthStore((state) => state.user);
+  const isAdmin = user?.role === 'ADMIN';
   const [activeTab, setActiveTab] = useState('home');
   const [profileSubScreen, setProfileSubScreen] = useState<string | null>(null);
   const [demandDetailsId, setDemandDetailsId] = useState<number | null>(null);
@@ -58,6 +62,9 @@ export default function TabNavigator() {
             onDemandPress={(id) => setDemandDetailsId(id)}
           />
         )}
+        {activeTab === 'aprovar' && isAdmin && (
+          <AprovarDemandasScreen onDemandPress={(id) => setDemandDetailsId(id)} />
+        )}
         {activeTab === 'nova' && <NovaDemandaScreen onNavigateToTab={setActiveTab} />}
         {activeTab === 'perfil' && renderProfileSubScreen()}
         {activeTab === 'mapa' && (
@@ -74,7 +81,11 @@ export default function TabNavigator() {
         )}
       </View>
       <View style={[styles.tabBar, { paddingBottom: insets.bottom + 8 }]}>
-        {tabs.map((tab) => (
+        {[
+          ...tabs.slice(0, 1),
+          ...(isAdmin ? [{ key: 'aprovar', label: 'Aprovar', icon: '✓' }] : []),
+          ...tabs.slice(1),
+        ].map((tab) => (
           <TouchableOpacity
             key={tab.key}
             style={styles.tab}

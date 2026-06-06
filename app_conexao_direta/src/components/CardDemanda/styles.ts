@@ -22,6 +22,11 @@ export const styles = StyleSheet.create({
     padding: theme.spacing.md,
     paddingBottom: 0,
   },
+  badgesRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 4,
+  },
   statusPill: {
     paddingVertical: 3,
     paddingHorizontal: 10,
@@ -29,6 +34,9 @@ export const styles = StyleSheet.create({
   },
   statusPending: {
     backgroundColor: theme.colors.accent,
+  },
+  statusPendingApproval: {
+    backgroundColor: theme.colors.yellow,
   },
   statusInProgress: {
     backgroundColor: theme.colors.bluePill,

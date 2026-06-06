@@ -23,7 +23,7 @@ export default function PerfilScreen({ onNavigateToSubScreen }: PerfilScreenProp
 
   const solved = demands?.filter((d) => d.status === 'SOLVED').length ?? 0;
   const ongoing = demands?.filter((d) => d.status === 'ONGOING').length ?? 0;
-  const pending = ongoing;
+  const pending = demands?.filter((d) => d.status === 'PENDING').length ?? 0;
 
   return (
     <ScrollView

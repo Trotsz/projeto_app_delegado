@@ -12,9 +12,10 @@ const tabs = [
   { key: 'resolvidas', label: 'Resolvidas' },
 ];
 
-const statusBadge = {
-  ONGOING: { label: 'Em andamento', style: 'inProgress' as const },
-  SOLVED: { label: 'Resolvida', style: 'solved' as const },
+const statusBadge: Record<string, { label: string; style: 'pending' | 'inProgress' | 'solved' }> = {
+  PENDING: { label: 'Pendente', style: 'pending' },
+  ONGOING: { label: 'Em andamento', style: 'inProgress' },
+  SOLVED: { label: 'Resolvida', style: 'solved' },
 };
 
 interface MinhasDemandasScreenProps {
@@ -37,7 +38,7 @@ export default function MinhasDemandasScreen({
 
   const filtered = demands?.filter((d) => {
     if (activeTab === 'all') return true;
-    if (activeTab === 'pendentes') return d.status === 'ONGOING';
+    if (activeTab === 'pendentes') return d.status === 'PENDING';
     if (activeTab === 'andamento') return d.status === 'ONGOING';
     if (activeTab === 'resolvidas') return d.status === 'SOLVED';
     return true;
@@ -96,7 +97,11 @@ export default function MinhasDemandasScreen({
                     <View
                       style={[
                         styles.demandBadge,
-                        badge.style === 'inProgress' ? styles.badgeInProgress : styles.badgeSolved,
+                        badge.style === 'pending'
+                          ? styles.badgePending
+                          : badge.style === 'inProgress'
+                            ? styles.badgeInProgress
+                            : styles.badgeSolved,
                       ]}
                     >
                       <Text style={styles.demandBadgeText}>{badge.label}</Text>

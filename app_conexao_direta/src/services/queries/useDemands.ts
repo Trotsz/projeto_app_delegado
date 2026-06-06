@@ -6,7 +6,7 @@ interface Demand {
   title: string;
   description?: string | null;
   category?: string | null;
-  status: 'SOLVED' | 'ONGOING';
+  status: 'PENDING' | 'ONGOING' | 'SOLVED';
   approved: boolean;
   authorId: string;
   author: { id: string; name: string; email: string };
@@ -58,6 +58,33 @@ export function useDeleteDemand() {
   return useMutation({
     mutationFn: async (id: number) => {
       await api.delete(`/demand/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['demands'] });
+    },
+  });
+}
+
+export function useApproveDemand() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (id: number) => {
+      const { data } = await api.patch(`/demand/${id}/approve`);
+      return data as Demand;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['demands'] });
+    },
+  });
+}
+
+export function useDisapproveDemand() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (id: number) => {
+      await api.delete(`/demand/${id}/disapprove`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['demands'] });

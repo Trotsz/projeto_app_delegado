@@ -6,7 +6,8 @@ interface Demand {
   id: number;
   title: string;
   description?: string | null;
-  status: 'PENDING' | 'IN_PROGRESS' | 'SOLVED' | 'ONGOING';
+  status: 'PENDING' | 'ONGOING' | 'SOLVED';
+  approved: boolean;
   author: { name: string };
   category?: string | null;
   date?: string;
@@ -18,12 +19,13 @@ interface CardDemandaProps {
   onPress?: () => void;
 }
 
-const statusConfig = {
-  PENDING: { label: 'Pendente', style: 'pending' as const },
-  IN_PROGRESS: { label: 'Em processo', style: 'inProgress' as const },
-  ONGOING: { label: 'Em andamento', style: 'inProgress' as const },
-  SOLVED: { label: 'Resolvida', style: 'solved' as const },
-};
+const statusConfig: Record<string, { label: string; style: 'pending' | 'inProgress' | 'solved' }> =
+  {
+    PENDING: { label: 'Pendente', style: 'pending' },
+    IN_PROGRESS: { label: 'Em processo', style: 'inProgress' },
+    ONGOING: { label: 'Em andamento', style: 'inProgress' },
+    SOLVED: { label: 'Resolvida', style: 'solved' },
+  };
 
 export default function CardDemanda({ demand, variant = 'light', onPress }: CardDemandaProps) {
   const status = statusConfig[demand.status] || statusConfig.PENDING;
@@ -40,8 +42,15 @@ export default function CardDemanda({ demand, variant = 'light', onPress }: Card
       activeOpacity={0.8}
     >
       <View style={styles.header}>
-        <View style={[styles.statusPill, styles[statusStyleKey] as ViewStyle]}>
-          <Text style={styles.statusText}>{status.label}</Text>
+        <View style={styles.badgesRow}>
+          <View style={[styles.statusPill, styles[statusStyleKey] as ViewStyle]}>
+            <Text style={styles.statusText}>{status.label}</Text>
+          </View>
+          {!demand.approved && (
+            <View style={[styles.statusPill, styles.statusPendingApproval as ViewStyle]}>
+              <Text style={styles.statusText}>Pendente</Text>
+            </View>
+          )}
         </View>
         {demand.date && (
           <Text style={[styles.date, variant === 'dark' && styles.dateDark]}>{demand.date}</Text>

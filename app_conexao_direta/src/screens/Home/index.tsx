@@ -27,7 +27,8 @@ export default function HomeScreen({ onNavigateToTab, onDemandPress }: Props) {
   const [activeFilter, setActiveFilter] = React.useState('all');
   const { data: demands, isLoading } = useDemands(activeFilter);
 
-  const pendingCount = demands?.filter((d) => d.status === 'ONGOING').length || 0;
+  const pendingCount =
+    demands?.filter((d) => d.status === 'PENDING' || d.status === 'ONGOING').length || 0;
   const solvedCount = demands?.filter((d) => d.status === 'SOLVED').length || 0;
   const totalCount = demands?.length || 0;
 

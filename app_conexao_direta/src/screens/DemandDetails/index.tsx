@@ -9,7 +9,12 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuthStore } from '../../store/useAuthStore';
-import { useDemandById, useDeleteDemand } from '../../services/queries/useDemands';
+import {
+  useDemandById,
+  useDeleteDemand,
+  useApproveDemand,
+  useDisapproveDemand,
+} from '../../services/queries/useDemands';
 import { theme } from '../../theme';
 
 interface DemandDetailsScreenProps {
@@ -18,6 +23,7 @@ interface DemandDetailsScreenProps {
 }
 
 const statusConfig: Record<string, { label: string; color: string }> = {
+  PENDING: { label: 'Pendente', color: theme.colors.accent },
   ONGOING: { label: 'Em andamento', color: theme.colors.bluePill },
   SOLVED: { label: 'Resolvida', color: theme.colors.green },
 };
@@ -27,10 +33,14 @@ export default function DemandDetailsScreen({ demandId, onGoBack }: DemandDetail
   const user = useAuthStore((state) => state.user);
   const { data: demand, isLoading } = useDemandById(demandId);
   const deleteDemand = useDeleteDemand();
+  const approveDemand = useApproveDemand();
+  const disapproveDemand = useDisapproveDemand();
   const [confirmingDelete, setConfirmingDelete] = useState(false);
-  const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [confirmingDisapprove, setConfirmingDisapprove] = useState(false);
+  const [actionError, setActionError] = useState<string | null>(null);
 
   const isOwner = user && demand && demand.authorId === user.id;
+  const isAdmin = user?.role === 'ADMIN';
   const status = demand ? statusConfig[demand.status] || statusConfig.ONGOING : null;
 
   async function handleDelete() {
@@ -42,7 +52,32 @@ export default function DemandDetailsScreen({ demandId, onGoBack }: DemandDetail
         err && typeof err === 'object' && 'response' in err
           ? (err as { response?: { data?: { message?: string } } }).response?.data?.message
           : 'Erro ao excluir demanda';
-      setDeleteError(msg || 'Erro ao excluir demanda');
+      setActionError(msg || 'Erro ao excluir demanda');
+    }
+  }
+
+  async function handleApprove() {
+    try {
+      await approveDemand.mutateAsync(demandId);
+    } catch (err: unknown) {
+      const msg =
+        err && typeof err === 'object' && 'response' in err
+          ? (err as { response?: { data?: { message?: string } } }).response?.data?.message
+          : 'Erro ao aprovar demanda';
+      setActionError(msg || 'Erro ao aprovar demanda');
+    }
+  }
+
+  async function handleDisapprove() {
+    try {
+      await disapproveDemand.mutateAsync(demandId);
+      onGoBack?.();
+    } catch (err: unknown) {
+      const msg =
+        err && typeof err === 'object' && 'response' in err
+          ? (err as { response?: { data?: { message?: string } } }).response?.data?.message
+          : 'Erro ao rejeitar demanda';
+      setActionError(msg || 'Erro ao rejeitar demanda');
     }
   }
 
@@ -78,18 +113,25 @@ export default function DemandDetailsScreen({ demandId, onGoBack }: DemandDetail
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        {deleteError && (
+        {actionError && (
           <View style={styles.errorBanner}>
-            <Text style={styles.errorBannerText}>{deleteError}</Text>
+            <Text style={styles.errorBannerText}>{actionError}</Text>
           </View>
         )}
 
         <View style={styles.card}>
-          {status && (
-            <View style={[styles.statusPill, { backgroundColor: status.color }]}>
-              <Text style={styles.statusText}>{status.label}</Text>
-            </View>
-          )}
+          <View style={styles.badgesRow}>
+            {status && (
+              <View style={[styles.statusPill, { backgroundColor: status.color }]}>
+                <Text style={styles.statusText}>{status.label}</Text>
+              </View>
+            )}
+            {!demand.approved && (
+              <View style={[styles.statusPill, { backgroundColor: theme.colors.accent }]}>
+                <Text style={styles.statusText}>Pendente de aprovação</Text>
+              </View>
+            )}
+          </View>
 
           <Text style={styles.demandTitle}>{demand.title}</Text>
 
@@ -111,7 +153,49 @@ export default function DemandDetailsScreen({ demandId, onGoBack }: DemandDetail
           ) : null}
         </View>
 
-        {isOwner && !confirmingDelete && (
+        {isAdmin && !demand.approved && !confirmingDisapprove && (
+          <View style={styles.adminActions}>
+            <TouchableOpacity style={styles.approveBtn} onPress={handleApprove} activeOpacity={0.8}>
+              <Text style={styles.approveBtnText}>✓ Aprovar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.rejectBtn}
+              onPress={() => setConfirmingDisapprove(true)}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.rejectBtnText}>✕ Rejeitar</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+
+        {isAdmin && !demand.approved && confirmingDisapprove && (
+          <View style={styles.deleteConfirmRow}>
+            <Text style={styles.deleteConfirmText}>
+              Tem certeza que deseja rejeitar esta demanda? Ela será excluída permanentemente.
+            </Text>
+            <View style={styles.deleteConfirmButtons}>
+              <TouchableOpacity
+                style={styles.deleteConfirmYes}
+                onPress={handleDisapprove}
+                activeOpacity={0.8}
+              >
+                <Text style={styles.deleteConfirmYesText}>Sim, rejeitar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.deleteConfirmNo}
+                onPress={() => {
+                  setConfirmingDisapprove(false);
+                  setActionError(null);
+                }}
+                activeOpacity={0.8}
+              >
+                <Text style={styles.deleteConfirmNoText}>Cancelar</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
+
+        {(isOwner || isAdmin) && !confirmingDelete && (
           <TouchableOpacity
             style={styles.deleteBtn}
             onPress={() => setConfirmingDelete(true)}
@@ -122,7 +206,7 @@ export default function DemandDetailsScreen({ demandId, onGoBack }: DemandDetail
           </TouchableOpacity>
         )}
 
-        {isOwner && confirmingDelete && (
+        {(isOwner || isAdmin) && confirmingDelete && (
           <View style={styles.deleteConfirmRow}>
             <Text style={styles.deleteConfirmText}>Tem certeza que deseja excluir?</Text>
             <View style={styles.deleteConfirmButtons}>
@@ -137,7 +221,7 @@ export default function DemandDetailsScreen({ demandId, onGoBack }: DemandDetail
                 style={styles.deleteConfirmNo}
                 onPress={() => {
                   setConfirmingDelete(false);
-                  setDeleteError(null);
+                  setActionError(null);
                 }}
                 activeOpacity={0.8}
               >
@@ -229,7 +313,6 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     paddingHorizontal: 12,
     borderRadius: theme.borderRadius.full,
-    marginBottom: theme.spacing.md,
   },
   statusText: {
     fontFamily: theme.fonts.bold,
@@ -274,6 +357,47 @@ const styles = StyleSheet.create({
     fontSize: theme.fontSize.base,
     color: theme.colors.text,
     lineHeight: 24,
+  },
+  badgesRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: theme.spacing.xs,
+    marginBottom: theme.spacing.md,
+  },
+  adminActions: {
+    flexDirection: 'row',
+    gap: theme.spacing.sm,
+    marginTop: theme.spacing.lg,
+  },
+  approveBtn: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: theme.spacing.sm,
+    paddingVertical: 14,
+    backgroundColor: theme.colors.green,
+    borderRadius: theme.borderRadius.sm,
+  },
+  approveBtnText: {
+    fontFamily: theme.fonts.bold,
+    fontSize: theme.fontSize.base,
+    color: theme.colors.white,
+  },
+  rejectBtn: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: theme.spacing.sm,
+    paddingVertical: 14,
+    backgroundColor: theme.colors.red,
+    borderRadius: theme.borderRadius.sm,
+  },
+  rejectBtnText: {
+    fontFamily: theme.fonts.bold,
+    fontSize: theme.fontSize.base,
+    color: theme.colors.white,
   },
   deleteBtn: {
     flexDirection: 'row',

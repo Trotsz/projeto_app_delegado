@@ -27,7 +27,7 @@ model Demand {
   description String?
   category String?
   approved Boolean @default(false)
-  status Status @default(ONGOING)
+  status Status @default(PENDING)
   author User @relation(fields: [authorId], references: [id])
   authorId String
 }
@@ -38,6 +38,7 @@ enum Role {
 }
 
 enum Status {
-  SOLVED
+  PENDING
   ONGOING
+  SOLVED
 }

@@ -5,12 +5,32 @@ class DemandService {
     return demandRepository.create(data);
   }
 
-  async findAll(category?: string, authorId?: string) {
-    return demandRepository.findAll(category, authorId);
+  async findAll(
+    category?: string,
+    authorId?: string,
+    user?: { id: string; role: 'ADMIN' | 'USER' },
+  ) {
+    if (authorId) {
+      return demandRepository.findAll(category, authorId);
+    }
+
+    const isAdmin = user?.role === 'ADMIN';
+    if (isAdmin) {
+      return demandRepository.findAll(category);
+    }
+
+    return demandRepository.findAll(category, undefined, true);
   }
 
-  async findById(id: number) {
-    return demandRepository.findById(id);
+  async findById(id: number, user?: { id: string; role: 'ADMIN' | 'USER' }) {
+    const demand = await demandRepository.findById(id);
+    if (!demand) return null;
+
+    if (demand.approved) return demand;
+    if (user?.role === 'ADMIN') return demand;
+    if (user?.id === demand.authorId) return demand;
+
+    return null;
   }
 
   async update(
@@ -29,10 +49,25 @@ class DemandService {
     return demandRepository.update(id, data);
   }
 
-  async delete(id: number, userId: string) {
+  async approve(id: number) {
     const demand = await demandRepository.findById(id);
     if (!demand) throw new Error('Demand not found');
-    if (demand.authorId !== userId) throw new Error('Not authorized to delete this demand');
+    await demandRepository.updateApproved(id, true);
+    return demandRepository.update(id, { status: 'ONGOING' });
+  }
+
+  async disapprove(id: number) {
+    const demand = await demandRepository.findById(id);
+    if (!demand) throw new Error('Demand not found');
+    return demandRepository.delete(id);
+  }
+
+  async delete(id: number, userId: string, userRole?: 'ADMIN' | 'USER') {
+    const demand = await demandRepository.findById(id);
+    if (!demand) throw new Error('Demand not found');
+    if (demand.authorId !== userId && userRole !== 'ADMIN') {
+      throw new Error('Not authorized to delete this demand');
+    }
     return demandRepository.delete(id);
   }
 }

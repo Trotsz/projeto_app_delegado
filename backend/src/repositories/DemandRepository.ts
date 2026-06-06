@@ -12,7 +12,7 @@ class DemandRepository {
     });
   }
 
-  async findAll(category?: string, authorId?: string) {
+  async findAll(category?: string, authorId?: string, approved?: boolean) {
     const where: Record<string, unknown> = {};
 
     if (category && category !== 'all') {
@@ -25,6 +25,10 @@ class DemandRepository {
 
     if (authorId) {
       where.authorId = authorId;
+    }
+
+    if (approved !== undefined) {
+      where.approved = approved;
     }
 
     return prisma.demand.findMany({
@@ -52,6 +56,13 @@ class DemandRepository {
     return prisma.demand.update({
       where: { id },
       data,
+    });
+  }
+
+  async updateApproved(id: number, approved: boolean) {
+    return prisma.demand.update({
+      where: { id },
+      data: { approved },
     });
   }
 

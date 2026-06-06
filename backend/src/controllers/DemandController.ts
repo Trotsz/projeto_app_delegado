@@ -20,7 +20,8 @@ class DemandController {
     try {
       const category = req.query.category as string | undefined;
       const authorId = req.query.authorId as string | undefined;
-      const demands = await demandService.findAll(category, authorId);
+      const user = req.user ? { id: req.user.id, role: req.user.role } : undefined;
+      const demands = await demandService.findAll(category, authorId, user);
       res.status(200).json(demands);
     } catch (err) {
       console.log('Error: ' + err);
@@ -31,7 +32,8 @@ class DemandController {
   async findById(req: Request, res: Response) {
     try {
       const id = Number(req.params.id);
-      const demand = await demandService.findById(id);
+      const user = req.user ? { id: req.user.id, role: req.user.role } : undefined;
+      const demand = await demandService.findById(id, user);
 
       if (!demand) {
         res.status(404).json({ message: 'Demand not found' });
@@ -73,8 +75,9 @@ class DemandController {
     try {
       const id = Number(req.params.id);
       const userId = req.user!.id;
+      const userRole = req.user!.role;
 
-      await demandService.delete(id, userId);
+      await demandService.delete(id, userId, userRole);
 
       res.status(204).send();
     } catch (err) {
@@ -84,6 +87,34 @@ class DemandController {
         : message.includes('not found')
           ? 404
           : 500;
+      res.status(status).json({ message });
+    }
+  }
+
+  async approve(req: Request, res: Response) {
+    try {
+      const id = Number(req.params.id);
+
+      const demand = await demandService.approve(id);
+
+      res.status(200).json(demand);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Internal server error';
+      const status = message.includes('not found') ? 404 : 500;
+      res.status(status).json({ message });
+    }
+  }
+
+  async disapprove(req: Request, res: Response) {
+    try {
+      const id = Number(req.params.id);
+
+      await demandService.disapprove(id);
+
+      res.status(204).send();
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Internal server error';
+      const status = message.includes('not found') ? 404 : 500;
       res.status(status).json({ message });
     }
   }

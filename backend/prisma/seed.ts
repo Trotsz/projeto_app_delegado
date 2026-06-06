@@ -1,33 +1,34 @@
+import 'dotenv/config';
 import { prisma } from '../src/lib/prisma';
 import { Role } from '../src/generated/prisma';
 import bcrypt from 'bcrypt';
 
 async function main() {
-  const hashedPassword = await bcrypt.hash('123456', 10);
+  const adminEmail = process.env.ADMIN_EMAIL;
+  const adminPassword = process.env.ADMIN_PASSWORD;
+  const adminName = process.env.ADMIN_NAME || 'Administrador';
+
+  if (!adminEmail || !adminPassword) {
+    console.error(
+      'Defina ADMIN_EMAIL e ADMIN_PASSWORD no arquivo .env para criar o usuario admin.',
+    );
+    process.exit(1);
+  }
+
+  const hashedPassword = await bcrypt.hash(adminPassword, 10);
 
   await prisma.user.upsert({
-    where: { email: 'admin@email.com' },
+    where: { email: adminEmail },
     update: {},
     create: {
-      email: 'admin@email.com',
-      name: 'Admin',
+      email: adminEmail,
+      name: adminName,
       hashedPassword,
       role: Role.ADMIN,
     },
   });
 
-  await prisma.user.upsert({
-    where: { email: 'user@email.com' },
-    update: {},
-    create: {
-      email: 'user@email.com',
-      name: 'Usuário Teste',
-      hashedPassword,
-      role: Role.USER,
-    },
-  });
-
-  console.log('Seed concluído com sucesso');
+  console.log(`Admin "${adminEmail}" criado com sucesso`);
 }
 
 main()

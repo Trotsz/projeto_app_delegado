@@ -22,6 +22,17 @@ interface DemandDetailsScreenProps {
   onGoBack?: () => void;
 }
 
+const categoryLabels: Record<string, string> = {
+  infra: 'Infraestrutura',
+  saude: 'Saúde',
+  educacao: 'Educação',
+  seguranca: 'Segurança',
+  'meio-ambiente': 'Meio Ambiente',
+  mobilidade: 'Mobilidade',
+  limpeza: 'Limpeza Urbana',
+  outros: 'Outros',
+};
+
 const statusConfig: Record<string, { label: string; color: string }> = {
   PENDING: { label: 'Pendente', color: theme.colors.accent },
   ONGOING: { label: 'Em andamento', color: theme.colors.bluePill },
@@ -100,7 +111,8 @@ export default function DemandDetailsScreen({ demandId, onGoBack }: DemandDetail
     );
   }
 
-  const categoryLabel = demand.category || 'Sem categoria';
+  const categoryLabel =
+    (demand.category && categoryLabels[demand.category]) || demand.category || 'Sem categoria';
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>

@@ -76,31 +76,37 @@ export default function CadastroScreen({ onNavigateToLogin }: Props) {
         </Text>
 
         <Text style={styles.label}>Nome completo</Text>
-        <TextInput
-          style={[styles.input, errors.name && styles.inputError]}
-          value={name}
-          onChangeText={(v) => {
-            setName(v);
-            setErrors((e) => ({ ...e, name: false }));
-          }}
-          placeholder="Seu nome"
-          placeholderTextColor="rgba(255,255,255,0.4)"
-        />
+        <View style={[styles.inputWrapper, errors.name && styles.inputError]}>
+          <Text style={styles.inputIcon}>👤</Text>
+          <TextInput
+            style={styles.input}
+            value={name}
+            onChangeText={(v) => {
+              setName(v);
+              setErrors((e) => ({ ...e, name: false }));
+            }}
+            placeholder="Seu nome"
+            placeholderTextColor="rgba(255,255,255,0.35)"
+          />
+        </View>
         {errors.name && <Text style={styles.errorText}>Nome é obrigatório</Text>}
 
         <Text style={styles.label}>Email</Text>
-        <TextInput
-          style={[styles.input, errors.email && styles.inputError]}
-          value={email}
-          onChangeText={(v) => {
-            setEmail(v);
-            setErrors((e) => ({ ...e, email: false }));
-          }}
-          placeholder="seu@email.com"
-          placeholderTextColor="rgba(255,255,255,0.4)"
-          keyboardType="email-address"
-          autoCapitalize="none"
-        />
+        <View style={[styles.inputWrapper, errors.email && styles.inputError]}>
+          <Text style={styles.inputIcon}>✉️</Text>
+          <TextInput
+            style={styles.input}
+            value={email}
+            onChangeText={(v) => {
+              setEmail(v);
+              setErrors((e) => ({ ...e, email: false }));
+            }}
+            placeholder="seu@email.com"
+            placeholderTextColor="rgba(255,255,255,0.35)"
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
+        </View>
         {errors.email && (
           <Text style={styles.errorText}>
             {email ? 'Formato de email inválido' : 'Email é obrigatório'}
@@ -108,20 +114,21 @@ export default function CadastroScreen({ onNavigateToLogin }: Props) {
         )}
 
         <Text style={styles.label}>Senha</Text>
-        <View style={styles.passwordWrapper}>
+        <View style={[styles.inputWrapper, errors.password && styles.inputError]}>
+          <Text style={styles.inputIcon}>🔒</Text>
           <TextInput
-            style={[styles.inputPassword, errors.password && styles.inputError]}
+            style={styles.input}
             value={password}
             onChangeText={(v) => {
               setPassword(v);
               setErrors((e) => ({ ...e, password: false }));
             }}
             placeholder="••••••••"
-            placeholderTextColor="rgba(255,255,255,0.4)"
+            placeholderTextColor="rgba(255,255,255,0.35)"
             secureTextEntry={!showPassword}
           />
           <TouchableOpacity style={styles.eyeBtn} onPress={() => setShowPassword(!showPassword)}>
-            <Text style={styles.eyeIcon}>{showPassword ? '👁️' : '👁️‍🗨️'}</Text>
+            <Text style={styles.inputIcon}>{showPassword ? '👁️' : '👁️‍🗨️'}</Text>
           </TouchableOpacity>
         </View>
         {errors.password && <Text style={styles.errorText}>Senha é obrigatória</Text>}
@@ -207,35 +214,27 @@ const styles = StyleSheet.create({
     color: theme.colors.white,
     marginBottom: theme.spacing.xs,
   },
+  inputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255,255,255,0.2)',
+    borderRadius: theme.borderRadius.sm,
+    backgroundColor: 'rgba(255,255,255,0.08)',
+    marginBottom: theme.spacing.md,
+    paddingHorizontal: 14,
+  },
+  inputIcon: {
+    fontSize: 16,
+    color: 'rgba(255,255,255,0.4)',
+  },
   input: {
-    width: '100%',
+    flex: 1,
     paddingVertical: 14,
-    paddingHorizontal: 14,
-    borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.25)',
-    borderRadius: theme.borderRadius.sm,
-    backgroundColor: 'rgba(255,255,255,0.08)',
-    color: theme.colors.white,
+    paddingHorizontal: 12,
     fontFamily: theme.fonts.regular,
     fontSize: theme.fontSize.base,
-    marginBottom: theme.spacing.md,
-  },
-  passwordWrapper: {
-    position: 'relative',
-    marginBottom: theme.spacing.md,
-  },
-  inputPassword: {
-    width: '100%',
-    paddingVertical: 14,
-    paddingHorizontal: 14,
-    paddingRight: 44,
-    borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.25)',
-    borderRadius: theme.borderRadius.sm,
-    backgroundColor: 'rgba(255,255,255,0.08)',
     color: theme.colors.white,
-    fontFamily: theme.fonts.regular,
-    fontSize: theme.fontSize.base,
   },
   inputError: {
     borderColor: theme.colors.red,
@@ -253,20 +252,13 @@ const styles = StyleSheet.create({
     fontSize: theme.fontSize.sm,
     textAlign: 'center',
     marginBottom: theme.spacing.md,
-    backgroundColor: 'rgba(255,0,0,0.1)',
+    backgroundColor: theme.colors.redLight,
     paddingVertical: theme.spacing.sm,
     paddingHorizontal: theme.spacing.md,
     borderRadius: theme.borderRadius.sm,
   },
   eyeBtn: {
-    position: 'absolute',
-    right: 14,
-    top: '50%',
-    transform: [{ translateY: -10 }],
-  },
-  eyeIcon: {
-    fontSize: 16,
-    color: 'rgba(255,255,255,0.4)',
+    padding: 4,
   },
   btnRegister: {
     width: '100%',

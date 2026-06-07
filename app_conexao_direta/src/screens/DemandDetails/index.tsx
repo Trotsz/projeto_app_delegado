@@ -289,9 +289,9 @@ const styles = StyleSheet.create({
     color: theme.colors.white,
   },
   errorBanner: {
-    backgroundColor: '#fef2f2',
+    backgroundColor: theme.colors.redLight,
     borderWidth: 1,
-    borderColor: '#fecaca',
+    borderColor: theme.colors.redBorder,
     borderRadius: theme.borderRadius.sm,
     padding: theme.spacing.sm,
     marginBottom: theme.spacing.md,
@@ -420,9 +420,9 @@ const styles = StyleSheet.create({
   },
   deleteConfirmRow: {
     marginTop: theme.spacing.lg,
-    backgroundColor: '#fef2f2',
+    backgroundColor: theme.colors.redLight,
     borderWidth: 1,
-    borderColor: '#fecaca',
+    borderColor: theme.colors.redBorder,
     borderRadius: theme.borderRadius.sm,
     padding: theme.spacing.md,
     gap: theme.spacing.md,

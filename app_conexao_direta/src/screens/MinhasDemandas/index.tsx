@@ -117,17 +117,24 @@ export default function MinhasDemandasScreen({
               </TouchableOpacity>
               {confirmingDeleteId === item.id ? (
                 <View style={styles.deleteConfirm}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      deleteDemand.mutate(item.id);
-                      setConfirmingDeleteId(null);
-                    }}
-                  >
-                    <Text style={styles.deleteConfirmYes}>Sim</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => setConfirmingDeleteId(null)}>
-                    <Text style={styles.deleteConfirmNo}>Não</Text>
-                  </TouchableOpacity>
+                  <Text style={styles.deleteConfirmText}>Excluir?</Text>
+                  <View style={styles.deleteConfirmButtons}>
+                    <TouchableOpacity
+                      style={styles.deleteConfirmYes}
+                      onPress={() => {
+                        deleteDemand.mutate(item.id);
+                        setConfirmingDeleteId(null);
+                      }}
+                    >
+                      <Text style={styles.deleteConfirmYesText}>Sim</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.deleteConfirmNo}
+                      onPress={() => setConfirmingDeleteId(null)}
+                    >
+                      <Text style={styles.deleteConfirmNoText}>Não</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
               ) : (
                 <TouchableOpacity
@@ -327,18 +334,46 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   deleteConfirm: {
-    flexDirection: 'row',
-    gap: theme.spacing.sm,
+    backgroundColor: theme.colors.redLight,
+    borderWidth: 1,
+    borderColor: theme.colors.redBorder,
+    borderRadius: theme.borderRadius.sm,
+    padding: theme.spacing.sm,
+    marginRight: theme.spacing.sm,
+    gap: theme.spacing.xs,
     alignItems: 'center',
   },
-  deleteConfirmYes: {
-    fontFamily: theme.fonts.bold,
-    fontSize: theme.fontSize.sm,
+  deleteConfirmText: {
+    fontFamily: theme.fonts.medium,
+    fontSize: theme.fontSize.xs,
     color: theme.colors.red,
   },
-  deleteConfirmNo: {
+  deleteConfirmButtons: {
+    flexDirection: 'row',
+    gap: theme.spacing.xs,
+  },
+  deleteConfirmYes: {
+    paddingVertical: 4,
+    paddingHorizontal: 12,
+    backgroundColor: theme.colors.red,
+    borderRadius: theme.borderRadius.sm,
+  },
+  deleteConfirmYesText: {
     fontFamily: theme.fonts.bold,
-    fontSize: theme.fontSize.sm,
-    color: theme.colors.textMuted,
+    fontSize: theme.fontSize.xs,
+    color: theme.colors.white,
+  },
+  deleteConfirmNo: {
+    paddingVertical: 4,
+    paddingHorizontal: 12,
+    backgroundColor: theme.colors.surface,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    borderRadius: theme.borderRadius.sm,
+  },
+  deleteConfirmNoText: {
+    fontFamily: theme.fonts.bold,
+    fontSize: theme.fontSize.xs,
+    color: theme.colors.text,
   },
 });

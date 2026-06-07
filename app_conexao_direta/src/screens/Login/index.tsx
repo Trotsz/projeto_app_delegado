@@ -249,7 +249,7 @@ const styles = StyleSheet.create({
     fontSize: theme.fontSize.sm,
     textAlign: 'center',
     marginBottom: theme.spacing.md,
-    backgroundColor: 'rgba(255,0,0,0.1)',
+    backgroundColor: theme.colors.redLight,
     paddingVertical: theme.spacing.sm,
     paddingHorizontal: theme.spacing.md,
     borderRadius: theme.borderRadius.sm,

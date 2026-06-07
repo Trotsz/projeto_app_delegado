@@ -61,7 +61,7 @@ export default function PerfilScreen({ onNavigateToSubScreen }: PerfilScreenProp
           <Text style={styles.statLabel}>EM ANDAMENTO</Text>
         </View>
         <View style={styles.statBox}>
-          <Text style={styles.statNumberYellow}>{ongoing}</Text>
+          <Text style={styles.statNumberYellow}>{pending}</Text>
           <Text style={styles.statLabel}>PENDENTES</Text>
         </View>
       </View>
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 3,
-    borderColor: '#e8eaf6',
+    borderColor: theme.colors.primaryLight,
   },
   avatarText: {
     fontFamily: theme.fonts.bold,
@@ -224,8 +224,11 @@ const styles = StyleSheet.create({
     padding: theme.spacing.md,
     marginHorizontal: theme.spacing.md,
     marginBottom: theme.spacing.xs,
-    backgroundColor: theme.colors.primary,
+    backgroundColor: theme.colors.surface,
     borderRadius: theme.borderRadius.md,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    ...theme.shadow.sm,
   },
   menuIcon: {
     width: 40,
@@ -241,22 +244,25 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: theme.fonts.bold,
     fontSize: theme.fontSize.base,
-    color: theme.colors.white,
+    color: theme.colors.text,
   },
   menuArrow: {
     fontSize: 20,
-    color: 'rgba(255,255,255,0.5)',
+    color: theme.colors.textLight,
   },
   menuItemLogout: {
     backgroundColor: theme.colors.surfaceAlt,
+    borderColor: 'transparent',
+    shadowOpacity: 0,
+    elevation: 0,
   },
   menuIconLogout: {
-    backgroundColor: '#fee2e2',
+    backgroundColor: theme.colors.redLight,
   },
   menuTextLogout: {
     flex: 1,
     fontFamily: theme.fonts.bold,
     fontSize: theme.fontSize.base,
-    color: '#dc2626',
+    color: theme.colors.red,
   },
 });

@@ -193,6 +193,12 @@ const styles = StyleSheet.create({
     color: theme.colors.white,
   },
   confirmRow: {
+    marginTop: theme.spacing.sm,
+    backgroundColor: theme.colors.redLight,
+    borderWidth: 1,
+    borderColor: theme.colors.redBorder,
+    borderRadius: theme.borderRadius.sm,
+    padding: theme.spacing.md,
     gap: theme.spacing.sm,
   },
   confirmText: {
@@ -220,8 +226,10 @@ const styles = StyleSheet.create({
   confirmNo: {
     flex: 1,
     paddingVertical: 10,
-    backgroundColor: theme.colors.surfaceAlt,
+    backgroundColor: theme.colors.surface,
     borderRadius: theme.borderRadius.sm,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
     alignItems: 'center',
   },
   confirmNoText: {

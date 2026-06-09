@@ -5,14 +5,19 @@ class DemandController {
   async create(req: Request, res: Response) {
     try {
       const { title, description, category } = req.body;
-      const authorId = req.user!.id;
 
+      if (!title || !title.trim()) {
+        res.status(400).json({ message: 'O título é obrigatório' });
+        return;
+      }
+
+      const authorId = req.user!.id;
       const demand = await demandService.create({ title, description, category, authorId });
 
       res.status(201).json(demand);
     } catch (err) {
-      console.log('Error: ' + err);
-      res.status(500).json({ message: 'Internal server error' });
+      const message = err instanceof Error ? err.message : 'Internal server error';
+      res.status(500).json({ message });
     }
   }
 
@@ -24,8 +29,8 @@ class DemandController {
       const demands = await demandService.findAll(category, authorId, user);
       res.status(200).json(demands);
     } catch (err) {
-      console.log('Error: ' + err);
-      res.status(500).json({ message: 'Internal server error' });
+      const message = err instanceof Error ? err.message : 'Internal server error';
+      res.status(500).json({ message });
     }
   }
 
@@ -42,8 +47,8 @@ class DemandController {
 
       res.status(200).json(demand);
     } catch (err) {
-      console.log('Error: ' + err);
-      res.status(500).json({ message: 'Internal server error' });
+      const message = err instanceof Error ? err.message : 'Internal server error';
+      res.status(500).json({ message });
     }
   }
 

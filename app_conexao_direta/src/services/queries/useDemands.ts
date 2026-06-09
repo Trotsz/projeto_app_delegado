@@ -6,10 +6,18 @@ interface Demand {
   title: string;
   description?: string | null;
   category?: string | null;
+  imageUrl?: string | null;
   status: 'PENDING' | 'ONGOING' | 'SOLVED';
   approved: boolean;
   authorId: string;
   author: { id: string; name: string; email: string };
+}
+
+interface CreateDemandData {
+  title: string;
+  description?: string;
+  category?: string;
+  image?: { uri: string; type: string; name: string } | null;
 }
 
 export function useDemands(category?: string, authorId?: string) {
@@ -31,8 +39,15 @@ export function useCreateDemand() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (demand: { title: string; description?: string; category?: string }) => {
-      const { data } = await api.post('/demand/create', demand);
+    mutationFn: async (demand: CreateDemandData) => {
+      const formData = new FormData();
+      formData.append('title', demand.title);
+      if (demand.description) formData.append('description', demand.description);
+      if (demand.category) formData.append('category', demand.category);
+      if (demand.image) {
+        formData.append('image', demand.image as unknown as Blob);
+      }
+      const { data } = await api.post('/demand/create', formData);
       return data as Demand;
     },
     onSuccess: () => {

@@ -1,7 +1,13 @@
 import demandRepository from '../repositories/DemandRepository.ts';
 
 class DemandService {
-  async create(data: { title: string; description?: string; category?: string; authorId: string }) {
+  async create(data: {
+    title: string;
+    description?: string;
+    category?: string;
+    imageUrl?: string;
+    authorId: string;
+  }) {
     return demandRepository.create(data);
   }
 

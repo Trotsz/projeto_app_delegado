@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
   View,
   Text,
+  Image,
   ScrollView,
   TouchableOpacity,
   StyleSheet,
@@ -161,6 +162,13 @@ export default function DemandDetailsScreen({ demandId, onGoBack }: DemandDetail
             <View style={styles.descriptionSection}>
               <Text style={styles.descriptionLabel}>Descrição</Text>
               <Text style={styles.descriptionText}>{demand.description}</Text>
+            </View>
+          ) : null}
+
+          {demand.imageUrl ? (
+            <View style={styles.imageSection}>
+              <Text style={styles.imageLabel}>Imagem anexada</Text>
+              <Image source={{ uri: demand.imageUrl }} style={styles.detailImage} />
             </View>
           ) : null}
         </View>
@@ -369,6 +377,20 @@ const styles = StyleSheet.create({
     fontSize: theme.fontSize.base,
     color: theme.colors.text,
     lineHeight: 24,
+  },
+  imageSection: {
+    marginTop: theme.spacing.md,
+  },
+  imageLabel: {
+    fontFamily: theme.fonts.bold,
+    fontSize: theme.fontSize.base,
+    color: theme.colors.text,
+    marginBottom: theme.spacing.sm,
+  },
+  detailImage: {
+    width: '100%',
+    height: 220,
+    borderRadius: theme.borderRadius.sm,
   },
   badgesRow: {
     flexDirection: 'row',

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Image, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useDemands, useDeleteDemand } from '../../services/queries/useDemands';
@@ -88,9 +88,13 @@ export default function MinhasDemandasScreen({
                 activeOpacity={0.7}
                 onPress={() => onDemandPress?.(item.id)}
               >
-                <View style={styles.demandIcon}>
-                  <Text style={styles.demandIconText}>📌</Text>
-                </View>
+                {item.imageUrl ? (
+                  <Image source={{ uri: item.imageUrl }} style={styles.demandThumb} />
+                ) : (
+                  <View style={styles.demandIcon}>
+                    <Text style={styles.demandIconText}>📌</Text>
+                  </View>
+                )}
                 <View style={styles.demandBody}>
                   <View style={styles.demandHeader}>
                     <Text style={styles.demandTitle}>{item.title}</Text>
@@ -254,6 +258,12 @@ const styles = StyleSheet.create({
   },
   demandIconText: {
     fontSize: 20,
+  },
+  demandThumb: {
+    width: 44,
+    height: 44,
+    borderRadius: theme.borderRadius.sm,
+    marginLeft: theme.spacing.sm,
   },
   demandBody: {
     flex: 1,

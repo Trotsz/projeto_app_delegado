@@ -1,12 +1,19 @@
 import { prisma } from '../lib/prisma.ts';
 
 class DemandRepository {
-  async create(data: { title: string; description?: string; category?: string; authorId: string }) {
+  async create(data: {
+    title: string;
+    description?: string;
+    category?: string;
+    imageUrl?: string;
+    authorId: string;
+  }) {
     return prisma.demand.create({
       data: {
         title: data.title,
         description: data.description ?? null,
         category: data.category ?? null,
+        imageUrl: data.imageUrl ?? null,
         author: { connect: { id: data.authorId } },
       },
     });
@@ -50,6 +57,7 @@ class DemandRepository {
       title?: string;
       description?: string;
       category?: string;
+      imageUrl?: string;
       status?: 'SOLVED' | 'ONGOING';
     },
   ) {

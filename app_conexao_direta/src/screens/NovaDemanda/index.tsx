@@ -1,5 +1,14 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useCreateDemand } from '../../services/queries/useDemands';
 import { theme } from '../../theme';
@@ -29,7 +38,30 @@ export default function NovaDemandaScreen({ onNavigateToTab }: Props) {
   const [description, setDescription] = useState('');
   const { mutateAsync: createDemand, isPending } = useCreateDemand();
 
+  const [selectedImage, setSelectedImage] = useState<{
+    uri: string;
+    type: string;
+    name: string;
+  } | null>(null);
+
   const [apiError, setApiError] = useState('');
+
+  async function pickImage() {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images'],
+      quality: 0.7,
+      allowsEditing: true,
+    });
+
+    if (!result.canceled && result.assets[0]) {
+      const asset = result.assets[0];
+      setSelectedImage({
+        uri: asset.uri,
+        type: asset.mimeType || 'image/jpeg',
+        name: asset.fileName || `photo_${Date.now()}.jpg`,
+      });
+    }
+  }
 
   async function handleSubmit() {
     if (!title.trim()) {
@@ -39,7 +71,7 @@ export default function NovaDemandaScreen({ onNavigateToTab }: Props) {
 
     setApiError('');
     try {
-      await createDemand({ title, description, category: selectedCategory });
+      await createDemand({ title, description, category: selectedCategory, image: selectedImage });
       setStep('success');
     } catch (err) {
       setApiError((err as any)?.response?.data?.message || 'Não foi possível criar a demanda');
@@ -92,6 +124,7 @@ export default function NovaDemandaScreen({ onNavigateToTab }: Props) {
             setSelectedCategory('');
             setTitle('');
             setDescription('');
+            setSelectedImage(null);
           }}
         >
           <Text style={styles.btnPrimaryText}>Nova Demanda</Text>
@@ -222,10 +255,24 @@ export default function NovaDemandaScreen({ onNavigateToTab }: Props) {
             </View>
           </View>
 
-          <TouchableOpacity style={styles.attachBtn}>
+          <TouchableOpacity style={styles.attachBtn} onPress={pickImage}>
             <Text style={styles.attachIcon}>📎</Text>
-            <Text style={styles.attachText}>Anexar imagem</Text>
+            <Text style={styles.attachText}>
+              {selectedImage ? 'Alterar imagem' : 'Anexar imagem'}
+            </Text>
           </TouchableOpacity>
+
+          {selectedImage && (
+            <View style={styles.imagePreviewContainer}>
+              <Image source={{ uri: selectedImage.uri }} style={styles.imagePreview} />
+              <TouchableOpacity
+                style={styles.imageRemoveBtn}
+                onPress={() => setSelectedImage(null)}
+              >
+                <Text style={styles.imageRemoveText}>✕ Remover</Text>
+              </TouchableOpacity>
+            </View>
+          )}
 
           {apiError ? <Text style={styles.apiErrorText}>{apiError}</Text> : null}
 
@@ -473,6 +520,27 @@ const styles = StyleSheet.create({
     paddingVertical: theme.spacing.sm,
     paddingHorizontal: theme.spacing.md,
     borderRadius: theme.borderRadius.sm,
+  },
+  imagePreviewContainer: {
+    marginBottom: theme.spacing.md,
+    alignItems: 'center',
+  },
+  imagePreview: {
+    width: '100%',
+    height: 200,
+    borderRadius: theme.borderRadius.sm,
+    marginBottom: theme.spacing.xs,
+  },
+  imageRemoveBtn: {
+    paddingVertical: 6,
+    paddingHorizontal: 16,
+    borderRadius: theme.borderRadius.full,
+    backgroundColor: theme.colors.redLight,
+  },
+  imageRemoveText: {
+    fontFamily: theme.fonts.medium,
+    fontSize: theme.fontSize.sm,
+    color: theme.colors.red,
   },
   btnNext: {
     paddingVertical: 16,

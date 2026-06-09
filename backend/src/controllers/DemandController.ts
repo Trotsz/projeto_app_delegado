@@ -12,7 +12,15 @@ class DemandController {
       }
 
       const authorId = req.user!.id;
-      const demand = await demandService.create({ title, description, category, authorId });
+      const multerFile = (req as { file?: Express.Multer.File }).file;
+      const imageUrl = multerFile ? `/uploads/${multerFile.filename}` : undefined;
+      const demand = await demandService.create({
+        title,
+        description,
+        category,
+        imageUrl,
+        authorId,
+      });
 
       res.status(201).json(demand);
     } catch (err) {

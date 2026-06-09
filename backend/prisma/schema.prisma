@@ -26,6 +26,7 @@ model Demand {
   title String
   description String?
   category String?
+  imageUrl String?
   approved Boolean @default(false)
   status Status @default(PENDING)
   author User @relation(fields: [authorId], references: [id])

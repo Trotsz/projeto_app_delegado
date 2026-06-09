@@ -58,6 +58,10 @@ export const styles = StyleSheet.create({
   dateDark: {
     color: 'rgba(255,255,255,0.7)',
   },
+  cardImage: {
+    width: '100%',
+    height: 160,
+  },
   title: {
     fontFamily: theme.fonts.bold,
     fontSize: theme.fontSize.md,

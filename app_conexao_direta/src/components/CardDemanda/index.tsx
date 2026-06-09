@@ -1,11 +1,12 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, type ViewStyle } from 'react-native';
+import { View, Image, Text, TouchableOpacity, type ViewStyle } from 'react-native';
 import { styles } from './styles';
 
 interface Demand {
   id: number;
   title: string;
   description?: string | null;
+  imageUrl?: string | null;
   status: 'PENDING' | 'ONGOING' | 'SOLVED';
   approved: boolean;
   author: { name: string };
@@ -56,6 +57,9 @@ export default function CardDemanda({ demand, variant = 'light', onPress }: Card
           <Text style={[styles.date, variant === 'dark' && styles.dateDark]}>{demand.date}</Text>
         )}
       </View>
+      {demand.imageUrl ? (
+        <Image source={{ uri: demand.imageUrl }} style={styles.cardImage} />
+      ) : null}
       <Text style={[styles.title, variant === 'dark' && styles.titleDark]}>{demand.title}</Text>
       {demand.description && (
         <Text

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
   View,
   Text,
+  Image,
   FlatList,
   TouchableOpacity,
   StyleSheet,
@@ -54,6 +55,9 @@ export default function AprovarDemandasScreen({ onDemandPress }: Props) {
           renderItem={({ item }) => (
             <View style={styles.card}>
               <TouchableOpacity activeOpacity={0.7} onPress={() => onDemandPress?.(item.id)}>
+                {item.imageUrl && (
+                  <Image source={{ uri: item.imageUrl }} style={styles.cardImage} />
+                )}
                 <Text style={styles.cardTitle}>{item.title}</Text>
                 <Text style={styles.cardAuthor}>por {item.author.name}</Text>
                 {item.description && (
@@ -144,6 +148,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: theme.colors.border,
     ...theme.shadow.sm,
+  },
+  cardImage: {
+    width: '100%',
+    height: 140,
+    borderRadius: theme.borderRadius.sm,
+    marginBottom: theme.spacing.sm,
   },
   cardTitle: {
     fontFamily: theme.fonts.bold,

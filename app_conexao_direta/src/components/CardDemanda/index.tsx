@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Image, Text, TouchableOpacity, type ViewStyle } from 'react-native';
 import { styles } from './styles';
+import { getImageUrl } from '../../utils/imageUrl';
 
 interface Demand {
   id: number;
@@ -58,7 +59,7 @@ export default function CardDemanda({ demand, variant = 'light', onPress }: Card
         )}
       </View>
       {demand.imageUrl ? (
-        <Image source={{ uri: demand.imageUrl }} style={styles.cardImage} />
+        <Image source={{ uri: getImageUrl(demand.imageUrl) }} style={styles.cardImage} />
       ) : null}
       <Text style={[styles.title, variant === 'dark' && styles.titleDark]}>{demand.title}</Text>
       {demand.description && (

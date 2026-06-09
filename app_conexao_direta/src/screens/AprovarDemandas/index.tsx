@@ -15,6 +15,7 @@ import {
   useDisapproveDemand,
 } from '../../services/queries/useDemands';
 import { theme } from '../../theme';
+import { getImageUrl } from '../../utils/imageUrl';
 
 interface Props {
   onDemandPress?: (demandId: number) => void;
@@ -56,7 +57,7 @@ export default function AprovarDemandasScreen({ onDemandPress }: Props) {
             <View style={styles.card}>
               <TouchableOpacity activeOpacity={0.7} onPress={() => onDemandPress?.(item.id)}>
                 {item.imageUrl && (
-                  <Image source={{ uri: item.imageUrl }} style={styles.cardImage} />
+                  <Image source={{ uri: getImageUrl(item.imageUrl) }} style={styles.cardImage} />
                 )}
                 <Text style={styles.cardTitle}>{item.title}</Text>
                 <Text style={styles.cardAuthor}>por {item.author.name}</Text>

@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useDemands, useDeleteDemand } from '../../services/queries/useDemands';
 import { theme } from '../../theme';
+import { getImageUrl } from '../../utils/imageUrl';
 
 const tabs = [
   { key: 'all', label: 'Todas' },
@@ -89,7 +90,7 @@ export default function MinhasDemandasScreen({
                 onPress={() => onDemandPress?.(item.id)}
               >
                 {item.imageUrl ? (
-                  <Image source={{ uri: item.imageUrl }} style={styles.demandThumb} />
+                  <Image source={{ uri: getImageUrl(item.imageUrl) }} style={styles.demandThumb} />
                 ) : (
                   <View style={styles.demandIcon}>
                     <Text style={styles.demandIconText}>📌</Text>

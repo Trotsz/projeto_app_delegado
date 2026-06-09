@@ -25,7 +25,8 @@ class DemandController {
       res.status(201).json(demand);
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Internal server error';
-      res.status(500).json({ message });
+      const status = message.includes('Faça login novamente') ? 401 : 500;
+      res.status(status).json({ message });
     }
   }
 

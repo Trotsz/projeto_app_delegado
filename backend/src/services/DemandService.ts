@@ -1,4 +1,5 @@
 import demandRepository from '../repositories/DemandRepository.ts';
+import userRepository from '../repositories/UserRepository.ts';
 
 class DemandService {
   async create(data: {
@@ -8,6 +9,8 @@ class DemandService {
     imageUrl?: string;
     authorId: string;
   }) {
+    const user = await userRepository.findById(data.authorId);
+    if (!user) throw new Error('Usuário não encontrado. Faça login novamente.');
     return demandRepository.create(data);
   }
 

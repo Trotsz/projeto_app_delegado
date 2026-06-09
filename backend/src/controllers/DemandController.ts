@@ -13,7 +13,9 @@ class DemandController {
 
       const authorId = req.user!.id;
       const multerFile = (req as { file?: Express.Multer.File }).file;
-      const imageUrl = multerFile ? `/uploads/${multerFile.filename}` : undefined;
+      const imageUrl = multerFile
+        ? `${req.protocol}://${req.get('host')}/uploads/${multerFile.filename}`
+        : undefined;
       const demand = await demandService.create({
         title,
         description,

@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { Platform } from 'react-native';
 import api from '../api';
 
 interface Demand {
@@ -45,7 +46,13 @@ export function useCreateDemand() {
       if (demand.description) formData.append('description', demand.description);
       if (demand.category) formData.append('category', demand.category);
       if (demand.image) {
-        formData.append('image', demand.image as unknown as Blob);
+        if (Platform.OS === 'web') {
+          const response = await fetch(demand.image.uri);
+          const blob = await response.blob();
+          formData.append('image', blob, demand.image.name);
+        } else {
+          formData.append('image', demand.image as unknown as Blob);
+        }
       }
       const { data } = await api.post('/demand/create', formData);
       return data as Demand;

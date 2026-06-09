@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Image, Text, TouchableOpacity, type ViewStyle } from 'react-native';
 import { styles } from './styles';
 import { getImageUrl } from '../../utils/imageUrl';
@@ -31,6 +31,7 @@ const statusConfig: Record<string, { label: string; style: 'pending' | 'inProgre
 
 export default function CardDemanda({ demand, variant = 'light', onPress }: CardDemandaProps) {
   const status = statusConfig[demand.status] || statusConfig.PENDING;
+  const [imageError, setImageError] = useState(false);
 
   const statusStyleKey =
     `status${status.style.charAt(0).toUpperCase() + status.style.slice(1)}` as keyof typeof styles;
@@ -58,8 +59,12 @@ export default function CardDemanda({ demand, variant = 'light', onPress }: Card
           <Text style={[styles.date, variant === 'dark' && styles.dateDark]}>{demand.date}</Text>
         )}
       </View>
-      {demand.imageUrl ? (
-        <Image source={{ uri: getImageUrl(demand.imageUrl) }} style={styles.cardImage} />
+      {demand.imageUrl && !imageError ? (
+        <Image
+          source={{ uri: getImageUrl(demand.imageUrl) }}
+          style={styles.cardImage}
+          onError={() => setImageError(true)}
+        />
       ) : null}
       <Text style={[styles.title, variant === 'dark' && styles.titleDark]}>{demand.title}</Text>
       {demand.description && (

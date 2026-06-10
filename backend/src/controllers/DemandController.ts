@@ -5,6 +5,7 @@ class DemandController {
   async create(req: Request, res: Response) {
     try {
       const { title, description, category } = req.body;
+      const multerFile = (req as { file?: Express.Multer.File }).file;
 
       if (!title || !title.trim()) {
         res.status(400).json({ message: 'O título é obrigatório' });
@@ -12,7 +13,6 @@ class DemandController {
       }
 
       const authorId = req.user!.id;
-      const multerFile = (req as { file?: Express.Multer.File }).file;
       const imageUrl = multerFile ? `/uploads/${multerFile.filename}` : undefined;
       const demand = await demandService.create({
         title,

@@ -264,7 +264,11 @@ export default function NovaDemandaScreen({ onNavigateToTab }: Props) {
 
           {selectedImage && (
             <View style={styles.imagePreviewContainer}>
-              <Image source={{ uri: selectedImage.uri }} style={styles.imagePreview} />
+              <Image
+                source={{ uri: selectedImage.uri }}
+                style={styles.imagePreview}
+                resizeMode="contain"
+              />
               <TouchableOpacity
                 style={styles.imageRemoveBtn}
                 onPress={() => setSelectedImage(null)}

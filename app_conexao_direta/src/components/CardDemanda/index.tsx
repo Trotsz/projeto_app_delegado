@@ -63,6 +63,7 @@ export default function CardDemanda({ demand, variant = 'light', onPress }: Card
         <Image
           source={{ uri: getImageUrl(demand.imageUrl) }}
           style={styles.cardImage}
+          resizeMode="contain"
           onError={() => setImageError(true)}
         />
       ) : null}

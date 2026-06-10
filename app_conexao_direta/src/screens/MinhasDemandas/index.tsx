@@ -90,7 +90,11 @@ export default function MinhasDemandasScreen({
                 onPress={() => onDemandPress?.(item.id)}
               >
                 {item.imageUrl ? (
-                  <Image source={{ uri: getImageUrl(item.imageUrl) }} style={styles.demandThumb} />
+                  <Image
+                    source={{ uri: getImageUrl(item.imageUrl) }}
+                    style={styles.demandThumb}
+                    resizeMode="contain"
+                  />
                 ) : (
                   <View style={styles.demandIcon}>
                     <Text style={styles.demandIconText}>📌</Text>

@@ -169,7 +169,11 @@ export default function DemandDetailsScreen({ demandId, onGoBack }: DemandDetail
           {demand.imageUrl ? (
             <View style={styles.imageSection}>
               <Text style={styles.imageLabel}>Imagem anexada</Text>
-              <Image source={{ uri: getImageUrl(demand.imageUrl) }} style={styles.detailImage} />
+              <Image
+                source={{ uri: getImageUrl(demand.imageUrl) }}
+                style={styles.detailImage}
+                resizeMode="contain"
+              />
             </View>
           ) : null}
         </View>

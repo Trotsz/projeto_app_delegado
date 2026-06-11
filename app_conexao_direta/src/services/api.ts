@@ -5,22 +5,22 @@ import { useAuthStore } from '../store/useAuthStore';
 
 export function getBaseUrl(): string {
   if (!__DEV__) {
-    return process.env.EXPO_PUBLIC_API_URL;
+    return process.env.EXPO_PUBLIC_API_URL || '';
   }
 
-  // On physical devices, try to get the computer's IP from the Expo bundler URL
-  const hostUri = Constants.expoConfig?.hostUri;
+  // Expo Go on physical devices: extract the bundler's LAN IP
+  const hostUri =
+    Constants.expoConfig?.hostUri || Constants.manifest?.hostUri || Constants.debuggerHost;
   if (hostUri) {
     const host = hostUri.split(':')[0];
     return `http://${host}:3000`;
   }
 
   // Emulator defaults
-  return Platform.select({
-    android: 'http://10.0.2.2:3000',
-    ios: 'http://localhost:3000',
-    default: 'http://localhost:3000',
-  });
+  if (Platform.OS === 'android') return 'http://10.0.2.2:3000';
+  if (Platform.OS === 'ios') return 'http://localhost:3000';
+
+  return 'http://localhost:3000';
 }
 
 const api = axios.create({

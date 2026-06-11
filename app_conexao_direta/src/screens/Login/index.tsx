@@ -53,7 +53,11 @@ export default function LoginScreen({ onNavigateToCadastro }: Props) {
       setAuth(data, user);
       await saveAuth({ token: data, user });
     } catch (err) {
-      setApiError((err as any)?.response?.data?.message || 'Email ou senha inválidos');
+      if ((err as any)?.response) {
+        setApiError((err as any)?.response?.data?.message || 'Email ou senha inválidos');
+      } else {
+        setApiError('Não foi possível conectar ao servidor');
+      }
     } finally {
       setLoading(false);
     }

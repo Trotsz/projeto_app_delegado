@@ -65,6 +65,13 @@ class DemandService {
     return demandRepository.update(id, { status: 'ONGOING' });
   }
 
+  async complete(id: number) {
+    const demand = await demandRepository.findById(id);
+    if (!demand) throw new Error('Demand not found');
+    if (demand.status !== 'ONGOING') throw new Error('Demanda não está em andamento');
+    return demandRepository.update(id, { status: 'SOLVED' });
+  }
+
   async disapprove(id: number) {
     const demand = await demandRepository.findById(id);
     if (!demand) throw new Error('Demand not found');

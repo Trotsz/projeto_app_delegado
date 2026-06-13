@@ -105,6 +105,20 @@ class DemandController {
     }
   }
 
+  async complete(req: Request, res: Response) {
+    try {
+      const id = Number(req.params.id);
+
+      const demand = await demandService.complete(id);
+
+      res.status(200).json(demand);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Internal server error';
+      const status = message.includes('not found') ? 404 : 400;
+      res.status(status).json({ message });
+    }
+  }
+
   async approve(req: Request, res: Response) {
     try {
       const id = Number(req.params.id);

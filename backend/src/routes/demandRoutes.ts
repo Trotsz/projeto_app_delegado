@@ -11,6 +11,7 @@ router.post('/create', auth, upload.single('image'), demandController.create);
 router.put('/:id', auth, demandController.update);
 router.delete('/:id', auth, demandController.delete);
 router.patch('/:id/approve', auth, adminGuard, demandController.approve);
+router.patch('/:id/complete', auth, adminGuard, demandController.complete);
 router.delete('/:id/disapprove', auth, adminGuard, demandController.disapprove);
 
 export default router;

@@ -87,6 +87,20 @@ export function useDeleteDemand() {
   });
 }
 
+export function useCompleteDemand() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (id: number) => {
+      const { data } = await api.patch(`/demand/${id}/complete`);
+      return data as Demand;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['demands'] });
+    },
+  });
+}
+
 export function useApproveDemand() {
   const queryClient = useQueryClient();
 

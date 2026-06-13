@@ -15,6 +15,7 @@ import {
   useDeleteDemand,
   useApproveDemand,
   useDisapproveDemand,
+  useCompleteDemand,
 } from '../../services/queries/useDemands';
 import { theme } from '../../theme';
 import { getImageUrl } from '../../utils/imageUrl';
@@ -47,6 +48,7 @@ export default function DemandDetailsScreen({ demandId, onGoBack }: DemandDetail
   const { data: demand, isLoading } = useDemandById(demandId);
   const deleteDemand = useDeleteDemand();
   const approveDemand = useApproveDemand();
+  const completeDemand = useCompleteDemand();
   const disapproveDemand = useDisapproveDemand();
   const [confirmingDelete, setConfirmingDelete] = useState(false);
   const [confirmingDisapprove, setConfirmingDisapprove] = useState(false);
@@ -91,6 +93,18 @@ export default function DemandDetailsScreen({ demandId, onGoBack }: DemandDetail
           ? (err as { response?: { data?: { message?: string } } }).response?.data?.message
           : 'Erro ao rejeitar demanda';
       setActionError(msg || 'Erro ao rejeitar demanda');
+    }
+  }
+
+  async function handleComplete() {
+    try {
+      await completeDemand.mutateAsync(demandId);
+    } catch (err: unknown) {
+      const msg =
+        err && typeof err === 'object' && 'response' in err
+          ? (err as { response?: { data?: { message?: string } } }).response?.data?.message
+          : 'Erro ao concluir demanda';
+      setActionError(msg || 'Erro ao concluir demanda');
     }
   }
 
@@ -218,6 +232,12 @@ export default function DemandDetailsScreen({ demandId, onGoBack }: DemandDetail
               </TouchableOpacity>
             </View>
           </View>
+        )}
+
+        {isAdmin && demand.status === 'ONGOING' && (
+          <TouchableOpacity style={styles.completeBtn} onPress={handleComplete} activeOpacity={0.8}>
+            <Text style={styles.completeBtnText}>✓ Concluir demanda</Text>
+          </TouchableOpacity>
         )}
 
         {(isOwner || isAdmin) && !confirmingDelete && (
@@ -434,6 +454,21 @@ const styles = StyleSheet.create({
     borderRadius: theme.borderRadius.sm,
   },
   rejectBtnText: {
+    fontFamily: theme.fonts.bold,
+    fontSize: theme.fontSize.base,
+    color: theme.colors.white,
+  },
+  completeBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: theme.spacing.sm,
+    marginTop: theme.spacing.lg,
+    paddingVertical: 14,
+    backgroundColor: theme.colors.green,
+    borderRadius: theme.borderRadius.sm,
+  },
+  completeBtnText: {
     fontFamily: theme.fonts.bold,
     fontSize: theme.fontSize.base,
     color: theme.colors.white,

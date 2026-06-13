@@ -52,6 +52,7 @@ export default function DemandDetailsScreen({ demandId, onGoBack }: DemandDetail
   const disapproveDemand = useDisapproveDemand();
   const [confirmingDelete, setConfirmingDelete] = useState(false);
   const [confirmingDisapprove, setConfirmingDisapprove] = useState(false);
+  const [confirmingComplete, setConfirmingComplete] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
 
   const isOwner = user && demand && demand.authorId === user.id;
@@ -99,6 +100,7 @@ export default function DemandDetailsScreen({ demandId, onGoBack }: DemandDetail
   async function handleComplete() {
     try {
       await completeDemand.mutateAsync(demandId);
+      setConfirmingComplete(false);
     } catch (err: unknown) {
       const msg =
         err && typeof err === 'object' && 'response' in err
@@ -234,10 +236,39 @@ export default function DemandDetailsScreen({ demandId, onGoBack }: DemandDetail
           </View>
         )}
 
-        {isAdmin && demand.status === 'ONGOING' && (
-          <TouchableOpacity style={styles.completeBtn} onPress={handleComplete} activeOpacity={0.8}>
+        {isAdmin && demand.status === 'ONGOING' && !confirmingComplete && (
+          <TouchableOpacity
+            style={styles.completeBtn}
+            onPress={() => setConfirmingComplete(true)}
+            activeOpacity={0.8}
+          >
             <Text style={styles.completeBtnText}>✓ Concluir demanda</Text>
           </TouchableOpacity>
+        )}
+
+        {isAdmin && demand.status === 'ONGOING' && confirmingComplete && (
+          <View style={styles.completeConfirmRow}>
+            <Text style={styles.completeConfirmText}>Confirmar conclusão desta demanda?</Text>
+            <View style={styles.completeConfirmButtons}>
+              <TouchableOpacity
+                style={styles.completeConfirmYes}
+                onPress={handleComplete}
+                activeOpacity={0.8}
+              >
+                <Text style={styles.completeConfirmYesText}>Sim, concluir</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.completeConfirmNo}
+                onPress={() => {
+                  setConfirmingComplete(false);
+                  setActionError(null);
+                }}
+                activeOpacity={0.8}
+              >
+                <Text style={styles.completeConfirmNoText}>Cancelar</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         )}
 
         {(isOwner || isAdmin) && !confirmingDelete && (
@@ -472,6 +503,49 @@ const styles = StyleSheet.create({
     fontFamily: theme.fonts.bold,
     fontSize: theme.fontSize.base,
     color: theme.colors.white,
+  },
+  completeConfirmRow: {
+    marginTop: theme.spacing.lg,
+    backgroundColor: theme.colors.greenLight,
+    borderWidth: 1,
+    borderColor: theme.colors.greenBorder,
+    borderRadius: theme.borderRadius.sm,
+    padding: theme.spacing.md,
+    gap: theme.spacing.md,
+  },
+  completeConfirmText: {
+    fontFamily: theme.fonts.medium,
+    fontSize: theme.fontSize.sm,
+    color: theme.colors.greenDark,
+    textAlign: 'center',
+  },
+  completeConfirmButtons: {
+    flexDirection: 'row',
+    gap: theme.spacing.sm,
+  },
+  completeConfirmYes: {
+    flex: 1,
+    paddingVertical: 12,
+    backgroundColor: theme.colors.green,
+    borderRadius: theme.borderRadius.sm,
+    alignItems: 'center',
+  },
+  completeConfirmYesText: {
+    fontFamily: theme.fonts.bold,
+    fontSize: theme.fontSize.sm,
+    color: theme.colors.white,
+  },
+  completeConfirmNo: {
+    flex: 1,
+    paddingVertical: 12,
+    backgroundColor: theme.colors.surfaceAlt,
+    borderRadius: theme.borderRadius.sm,
+    alignItems: 'center',
+  },
+  completeConfirmNoText: {
+    fontFamily: theme.fonts.bold,
+    fontSize: theme.fontSize.sm,
+    color: theme.colors.text,
   },
   deleteBtn: {
     flexDirection: 'row',
